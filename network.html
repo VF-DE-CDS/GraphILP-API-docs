@@ -1,0 +1,1430 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Networks &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Packing" href="packing.html" />
+    <link rel="prev" title="Matching" href="matching.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#steiner-tree-problem">Steiner Tree Problem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cycle-based-constraint-system">Cycle-based constraint system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linear-size-constraint-system">Linear-size constraint system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heuristics">Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#prize-collecting-steiner-tree-pcst">Prize Collecting Steiner Tree (PCST)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Cycle-based constraint system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Linear-size constraint system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#travelling-salesman-problem-tsp">Travelling Salesman Problem (TSP)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#asymmetric-tsp">Asymmetric TSP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generic">Generic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atsp">ATSP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#path-atsp">Path ATSP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#metric-tsp">Metric TSP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#path-tsp">Path TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.network.steiner">Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Networks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/network.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="networks">
+<span id="network"></span><h1>Networks<a class="headerlink" href="#networks" title="Permalink to this headline">¶</a></h1>
+<p>Graphs are very well-suited as models for networks. Typical questions in this area aim at the distribution of some commodity through a network. Such commodities could be water in a pipe network, bandwidth in a communications network, or goods in a supply chain.</p>
+<div class="section" id="steiner-tree-problem">
+<span id="id1"></span><h2>Steiner Tree Problem<a class="headerlink" href="#steiner-tree-problem" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Steiner_tree_problem#Steiner_tree_in_graphs_and_variants">Steiner Tree Problem in graphs</a> asks for the shortest connection of a subset of the vertex set. This subset is usually called the set of terminals. While this problem is easy when all vertices are terminals (minimum spanning tree) or when there are only two terminals (shortest path), it is NP-hard otherwise. This means that unless P=NP, we expect any algorithm to become very slow for large instances. For this reason, we provide different formulations of the problem which may be more or less suitable for solving different types of instances.</p>
+<div class="section" id="cycle-based-constraint-system">
+<h3>Cycle-based constraint system<a class="headerlink" href="#cycle-based-constraint-system" title="Permalink to this headline">¶</a></h3>
+<p>This formulation ensures that non-connected solutions must contain a cycle. Any cycles appearing in incumbent solutions are then avoided by explicitly adding constraints forbidding them through a callback.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.steiner.create_model" title="graphilp.network.steiner.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the minimum Steiner tree problem in graphs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.steiner.extract_solution" title="graphilp.network.steiner.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal Steiner tree in G</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.steiner.callback_cycle" title="graphilp.network.steiner.callback_cycle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">callback_cycle</span></code></a></p></td>
+<td><p>Callback inserts constraints to forbid cycles in solution candidates</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="linear-size-constraint-system">
+<h3>Linear-size constraint system<a class="headerlink" href="#linear-size-constraint-system" title="Permalink to this headline">¶</a></h3>
+<p>Introducing vertex labels that increase along edges of the solution in the Steiner tree allows to give a formulation of linear size in the number of edges of the graph. Thus, the use of callback functions can be avoided.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.steiner_linear.create_model" title="graphilp.network.steiner_linear.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the minimum Steiner tree problem in graphs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.steiner_linear.extract_solution" title="graphilp.network.steiner_linear.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal Steiner tree in G</p></td>
+</tr>
+</tbody>
+</table>
+<p>There is also a version of this constraint system with somewhat stronger conditions on the labels:</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.steiner_linear_tightened.create_model" title="graphilp.network.steiner_linear_tightened.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the minimum Steiner tree problem in graphs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.steiner_linear_tightened.extract_solution" title="graphilp.network.steiner_linear_tightened.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal Steiner tree in G</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="heuristics">
+<h3>Heuristics<a class="headerlink" href="#heuristics" title="Permalink to this headline">¶</a></h3>
+<p>Approximate solutions can be used as a warmstart in the optimisation, usually leading to shorter running times.
+Constant factor approximations also imply a lower bound on the solution.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.heuristics.steiner_metric_closure.get_heuristic" title="graphilp.network.heuristics.steiner_metric_closure.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Approximation to the Steiner tree problem by metric closure</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="prize-collecting-steiner-tree-pcst">
+<h2>Prize Collecting Steiner Tree (PCST)<a class="headerlink" href="#prize-collecting-steiner-tree-pcst" title="Permalink to this headline">¶</a></h2>
+<p>The Prize Collecting Steiner Tree Problem is similar to the <a class="reference internal" href="#steiner-tree-problem"><span class="std std-ref">Steiner Tree Problem</span></a> in that a lowest weight network spanning a given set of vertices is desired. However, each vertex comes with a prize value that is counted against the edge weights and it is a part of the problem to select a subset of the vertex set that optimises the total prize against the total cost of the network.</p>
+<div class="section" id="id2">
+<h3>Cycle-based constraint system<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>This formulation ensures that non-connected solutions must contain a cycle. Any cycles appearing in incumbent solutions are then avoided by explicitly adding constraints forbidding them through a callback.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.pcst.create_model" title="graphilp.network.pcst.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the Prize Collecting Steiner Tree Problem.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.pcst.extract_solution" title="graphilp.network.pcst.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal prize collecting Steiner tree in G</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.pcst.callback_cycle" title="graphilp.network.pcst.callback_cycle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">callback_cycle</span></code></a></p></td>
+<td><p>Callback inserts constraints to forbid cycles in solution candidates</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id3">
+<h3>Linear-size constraint system<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Introducing vertex labels that increase along edges of the solution in the prize collecting Steiner tree allows to give a formulation of linear size in the number of edges of the graph. Thus, the use of callback functions can be avoided.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.pcst_linear.create_model" title="graphilp.network.pcst_linear.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the Prize Collecting Steiner Tree Problem.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.pcst_linear.extract_solution" title="graphilp.network.pcst_linear.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal prize collecting Steiner tree in G</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="travelling-salesman-problem-tsp">
+<h2>Travelling Salesman Problem (TSP)<a class="headerlink" href="#travelling-salesman-problem-tsp" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">Travelling Salesman Problem</a> is one of the most well-known problems of combinatorial optimisation. Given a list of cities (nodes in a graph) and distances between all pairs of cities (weighted edges in a graph), a solution to this problem is a shortest tour going through all cities but visiting no city twice.</p>
+<p>Depending on whether the tour needs to start where it began and on the properties of the distances (for example they can be required to give a metric) there are many variants of the problem.</p>
+<div class="section" id="asymmetric-tsp">
+<h3>Asymmetric TSP<a class="headerlink" href="#asymmetric-tsp" title="Permalink to this headline">¶</a></h3>
+<p>In the asymmetric case, the underlying graph is directed and the distance from A to B may be different from the distance from B to A.</p>
+<div class="section" id="generic">
+<h4>Generic<a class="headerlink" href="#generic" title="Permalink to this headline">¶</a></h4>
+<p>Introducing vertex labels that increase along the edges of the tour allows to give a formulation of linear size in the number of edges of the graph. Thus, the use of callback functions can be avoided.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.gen_path_atsp.create_model" title="graphilp.network.gen_path_atsp.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the min/max path asymmetric TSP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.gen_path_atsp.extract_solution" title="graphilp.network.gen_path_atsp.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal tour in G</p></td>
+</tr>
+</tbody>
+</table>
+<p>This formulation ensures that solutions are a disjoint union of cycles. More than one cycle appearing in incumbent solutions is then avoided by explicitly adding constraints forbidding this through a callback (sub-tour elimination).</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.tsp_callbacks.create_model" title="graphilp.network.tsp_callbacks.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the min/max path asymmetric TSP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.tsp_callbacks.extract_solution" title="graphilp.network.tsp_callbacks.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal tour in G</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="atsp">
+<h4>ATSP<a class="headerlink" href="#atsp" title="Permalink to this headline">¶</a></h4>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.atsp.create_model" title="graphilp.network.atsp.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the min/max asymmetric TSP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.atsp.extract_solution" title="graphilp.network.atsp.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal tour in G</p></td>
+</tr>
+</tbody>
+</table>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.atsp_desrochers_laporte.create_model" title="graphilp.network.atsp_desrochers_laporte.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Faster formulation for the min/max asymmetric TSP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.atsp_desrochers_laporte.extract_solution" title="graphilp.network.atsp_desrochers_laporte.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal tour in G</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="path-atsp">
+<h4>Path ATSP<a class="headerlink" href="#path-atsp" title="Permalink to this headline">¶</a></h4>
+<p>In the path version, the tour may start and end in different vertices.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.path_atsp.create_model" title="graphilp.network.path_atsp.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the min/max asymmetric path TSP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.path_atsp.extract_solution" title="graphilp.network.path_atsp.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal tour in G</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="metric-tsp">
+<h3>Metric TSP<a class="headerlink" href="#metric-tsp" title="Permalink to this headline">¶</a></h3>
+<p>In the metric TSP, the edge weights form a metric on the graph, i.e., they obey the triangle inequality <span class="math notranslate nohighlight">\(w_{uv} \leq w_{ux} + w_{xv}\)</span> for any three vertices <span class="math notranslate nohighlight">\(u, v, x\)</span>.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.tsp.create_model" title="graphilp.network.tsp.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the min/max metric TSP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.tsp.extract_solution" title="graphilp.network.tsp.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal tour in G</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="path-tsp">
+<h4>Path TSP<a class="headerlink" href="#path-tsp" title="Permalink to this headline">¶</a></h4>
+<p>In the path version, the tour may start and end in different vertices.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.path_tsp.create_model" title="graphilp.network.path_tsp.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the min/max metric path TSP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.network.path_tsp.extract_solution" title="graphilp.network.path_tsp.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the optimal tour in G</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Heuristics<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Approximate solutions can be used as a warmstart in the optimisation, usually leading to shorter running times.
+Constant factor approximations also imply a lower bound on the solution.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.heuristics.tsp_christofides.get_heuristic" title="graphilp.network.heuristics.tsp_christofides.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Approximation to TSP by <a class="reference external" href="https://en.wikipedia.org/wiki/Christofides_algorithm">Christofides’s algorithm</a></p></td>
+</tr>
+</tbody>
+</table>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.heuristics.tsp_nearest_neighbour.get_heuristic" title="graphilp.network.heuristics.tsp_nearest_neighbour.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Nearest neighbour heuristic for TSP</p></td>
+</tr>
+</tbody>
+</table>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.network.heuristics.tsp_two_opt.get_heuristic" title="graphilp.network.heuristics.tsp_two_opt.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>2 Opt - Improvement heuristic for the Traveling Salesman Problem</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-graphilp.network.steiner">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.network.steiner" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="graphilp.network.steiner.callback_cycle">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.steiner.</span></code><code class="sig-name descname"><span class="pre">callback_cycle</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.steiner.callback_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback inserts constraints to forbid cycles in solution candidates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p></li>
+<li><p><strong>where</strong> – a Gurobi callback parameter indicating from which step of the optimisation the callback
+originated</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.steiner.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.steiner.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.steiner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the minimum Steiner tree problem in graphs.</p>
+<p>This formulation enforces a cycle in the solution if it is not connected.
+A callback will detect cycles and add constraints to explicity forbid them.
+Together, this ensures that the solution is a tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>terminals</strong> – a list of vertices that need to be connected by the Steiner tree</p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tree in G connecting all terminals</p></li>
+<li><p><strong>lower_bound</strong> – give a known lower bound to the solution length</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>Callbacks:</dt><dd><p>This model uses callbacks which need to be included when calling Gurobi’s optimize function:</p>
+<p>model.optimize(callback = <a class="reference internal" href="#graphilp.network.steiner.callback_cycle" title="graphilp.network.steiner.callback_cycle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">callback_cycle</span></code></a>)</p>
+</dd>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(T\)</span> be the set of terminals.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{(u,v) \in E} w_{uv} x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall t \in T: x_t = 1 &amp;&amp; \text{(require terminals to be chosen)}\\
+\sum_{v\in V} x_v - \sum_{\{u,v\}\in E} x_{uv} = 1 &amp;&amp; \text{(enforce cycle when graph is not connected)}\\
+\forall \{u,v\}\in E: 2x_{uv} - x_u - x_v \leq 0 &amp;&amp; \text{(require vertices to be chosen when edge is chosen)}\\
+\forall i \in V: x_i-\sum_{u=i \vee v=i}x_{uv} \leq 0 &amp;&amp; \text{(forbid isolated vertices)}\\
+\end{align*}</div><p>The callbacks add a new constraint for each cycle <span class="math notranslate nohighlight">\(C\)</span> of length <span class="math notranslate nohighlight">\(\ell(C)\)</span>
+coming up in a solution candidate:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\sum_{\{u, v\} \in C} x_{uv} &lt; \ell(C) &amp;&amp; \text{(forbid including complete cycle)}
+\end{align*}</div></dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_steiner.png" src="_images/example_steiner.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/SteinerTreesOnStreetmap.ipynb">Steiner trees</a></p>
+<p>Find the shortest tree connecting a given set of nodes in a graph.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.steiner.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.steiner.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.steiner.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal Steiner tree in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for the minimum Steiner tree problem</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal Steiner tree connecting all terminals in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.steiner_linear"></span><dl class="py function">
+<dt id="graphilp.network.steiner_linear.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.steiner_linear.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.steiner_linear.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the minimum Steiner tree problem in graphs.</p>
+<p>This formulation enforces a cycle in the solution if it is not connected.
+Cycles are then forbidden by enforcing an increasing labelling along the edges of the solution.
+To this end, the formulation is working with a directed graph internally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>terminals</strong> – a list of vertices that need to be connected by the Steiner tree</p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tree in G connecting all terminals</p></li>
+<li><p><strong>lower_bound</strong> – give a known lower bound to the solution length</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(n = |V|\)</span> be the number of vertices in <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(T\)</span> the set of terminals.
+Further, let <span class="math notranslate nohighlight">\(\overrightarrow{E} := \{(u, v), (v, u) \mid \{u, v\} \in E\}\)</span>
+be the directed edge set used in the internal representation.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{(u,v) \in \overrightarrow{E}} w_{uv} x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall \{u,v\} \in E: x_{uv} + x_{vu} \leq 1 &amp;&amp; \text{(restrict edges to one direction)}\\
+\forall t \in T: x_t = 1 &amp;&amp; \text{(require terminals to be chosen)}\\
+\sum_{v \in V} x_v - \sum_{(u, v) \in \overrightarrow{E}} x_{uv} = 1 &amp;&amp; \text{(enforce cycle when graph}\\
+&amp;&amp; \text{is not connected)}\\
+\forall \{u,v\}\in E: 2(x_{uv}+x_{vu}) - x_u - x_v \leq 0 &amp;&amp; \text{(require vertices to be chosen}\\
+&amp;&amp; \text{when edge is chosen)}\\
+\forall i \in V: x_i-\sum_{u=i \vee v=i}x_{uv} \leq 0 &amp;&amp; \text{(forbid isolated vertices)}\\
+\forall \{u,v\}\in E: n x_{uv} + \ell_v - \ell_u \geq 1 - n(1-x_{vu}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall \{u,v\}\in E: n x_{vu} + \ell_u - \ell_v \geq 1 - n(1-x_{uv}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall v \in V: \sum_{(u,v) \in \overrightarrow{E}} x_{uv} \leq 1 &amp;&amp; \text{(only one arrow into each vertex)}\\
+\end{align*}</div></dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_steiner.png" src="_images/example_steiner.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/SteinerTreesOnStreetmap.ipynb">Steiner trees</a></p>
+<p>Find the shortest tree connecting a given set of nodes in a graph.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.steiner_linear.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.steiner_linear.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.steiner_linear.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal Steiner tree in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for the minimum Steiner tree problem</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal Steiner tree connecting all terminals in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.steiner_linear_tightened"></span><dl class="py function">
+<dt id="graphilp.network.steiner_linear_tightened.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.steiner_linear_tightened.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.steiner_linear_tightened.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the minimum Steiner tree problem in graphs.</p>
+<p>This formulation enforces a cycle in the solution if it is not connected.
+Cycles are then forbidden by enforcing an increasing labelling along the edges of the solution.
+To this end, the formulation is working with a directed graph internally.
+As a slight modification of <a class="reference internal" href="#module-graphilp.network.steiner_linear" title="graphilp.network.steiner_linear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graphilp.network.steiner_linear</span></code></a>, the constraints enforce
+that the labels increase by one along each edge in the solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>terminals</strong> – a list of nodes that need to be connected by the Steiner tree</p></li>
+<li><p><strong>root</strong> – a terminal chosen as the root of the Steiner tree</p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tree in G connecting all terminals</p></li>
+<li><p><strong>lower_bound</strong> – give a known lower bound to the solution length</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(n = |V|\)</span> be the number of vertices in <span class="math notranslate nohighlight">\(G\)</span>, <span class="math notranslate nohighlight">\(T\)</span> the set of terminals,
+and <span class="math notranslate nohighlight">\(r\)</span> be a terminal chosen as the root of the Steiner tree.
+Further, let <span class="math notranslate nohighlight">\(\overrightarrow{E} := \{(u, v), (v, u) \mid \{u, v\} \in E\}\)</span>
+be the directed edge set used in the internal representation.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{(u,v) \in \overrightarrow{E}} w_{uv} x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall \{u,v\} \in E: x_{uv} + x_{vu} \leq 1 &amp;&amp; \text{(restrict edges to one direction)}\\
+\ell_r = 1 &amp;&amp; \text{(root label is set to 1)}\\
+\forall t \in T: x_t = 1 &amp;&amp; \text{(require terminals to be chosen)}\\
+\sum_{v \in V} x_v - \sum_{(u, v) \in \overrightarrow{E}} x_{ij} = 1 &amp;&amp; \text{(enforce circle when graph}\\
+&amp;&amp; \text{is not connected)}\\
+\forall \{u,v\}\in E: 2(x_{uv}+x_{vu}) - x_u - x_v \leq 0 &amp;&amp; \text{(require vertices to be chosen}\\
+&amp;&amp; \text{when edge is chosen)}\\
+\forall i \in V: x_i-\sum_{u=i \vee v=i}x_{uv} \leq 0 &amp;&amp; \text{(forbid isolated nodes)}\\
+\forall \{u,v\}\in E: \ell_v - 2nx_{vu} \leq \ell_u + 1 + 2n(1-x_{uv}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall \{u,v\}\in E: \ell_u + 1 \leq 2nx_{vu} + \ell_v + 2n(1-x_{uv}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall \{u,v\}\in E: \ell_u - 2nx_{uv} \leq \ell_v + 1 + 2n(1-x_{vu}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall \{u,v\}\in E: \ell_v + 1 \leq 2nx_{uv} + \ell_u + 2n(1-x_{vu}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall v \in V: \ell_v - n x_v \leq 1&amp;&amp; \text{(set label to 1 when}\\
+&amp;&amp; \text{vertex is not chosen)}\\
+\forall v \in V: \sum_{(u,v) \in \overrightarrow{E}} x_{uv} \leq 1 &amp;&amp; \text{(only one arrow into each vertex)}\\
+\end{align*}</div></dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_steiner.png" src="_images/example_steiner.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/SteinerTreesOnStreetmap.ipynb">Steiner trees</a></p>
+<p>Find the shortest tree connecting a given set of nodes in a graph.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.steiner_linear_tightened.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.steiner_linear_tightened.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.steiner_linear_tightened.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal Steiner tree in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for the minimum Steiner tree problem</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal Steiner tree connecting all terminals in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.heuristics.steiner_metric_closure"></span><dl class="py function">
+<dt id="graphilp.network.heuristics.steiner_metric_closure.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.steiner_metric_closure.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.steiner_metric_closure.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximation to the Steiner tree problem by metric closure</p>
+<p>Creates a minimum weight spanning tree in the metric closure of terminals in the graph.
+This is a 2-approximation to the Steiner tree problem and hence also gives a lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>terminals</strong> – a list of vertices that need to be connected by the Steiner tree</p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges forming the approximate solution and a lower bound on the optimal solution</p>
+</dd>
+</dl>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">warmstart</span><span class="p">,</span> <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">steiner_metric_closure</span><span class="o">.</span><span class="n">getHeuristic</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">terminals</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">terminals</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="n">warmstart</span><span class="o">=</span><span class="n">warmstart</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="n">lower_bound</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.pcst"></span><dl class="py function">
+<dt id="graphilp.network.pcst.callback_cycle">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.pcst.</span></code><code class="sig-name descname"><span class="pre">callback_cycle</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.pcst.callback_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback inserts constraints to forbid cycles in solution candidates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – <p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p></li>
+<li><p><strong>where</strong> – a Gurobi callback parameter indicating from which step of the optimisation the callback
+originated</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.pcst.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.pcst.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forced_terminals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prize'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.pcst.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the Prize Collecting Steiner Tree Problem.</p>
+<p>This formulation enforces a cycle in the solution if it is not connected.
+A callback will detect cycles and add constraints to explicity forbid them.
+Together, this ensures that the solution is a tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>forced_terminals</strong> – list of terminals that have to be connected</p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+<li><p><strong>prize</strong> – name of the argument in the vertex dictionary of the graph used to store vertex prize values</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tree in G connecting all terminals</p></li>
+<li><p><strong>lower_bound</strong> – give a known lower bound to the solution length</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>Callbacks:</dt><dd><p>This model uses callbacks which need to be included when calling Gurobi’s optimize function:</p>
+<p>model.optimize(callback = <a class="reference internal" href="#graphilp.network.pcst.callback_cycle" title="graphilp.network.pcst.callback_cycle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">callback_cycle</span></code></a>)</p>
+</dd>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(T_f\)</span> be the set of forced terminals required to be part of the solution.
+Further, let <span class="math notranslate nohighlight">\(p_v\)</span> be the prize associated with each vertex <span class="math notranslate nohighlight">\(v\)</span>.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{v \in V} p_v x_v- \sum_{\{u,v\} \in E} w_{uv} x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall \{u,v\}\in E: x_{uv} + x_{vu} \leq 1 &amp;&amp; \text{(restrict edges to one direction)}\\
+\forall t \in T_f: x_t = 1 &amp;&amp; \text{(require forced terminals to be chosen)}\\
+\sum_{v\in V} x_v - \sum_{\{u,v\}\in E} x_{uv} = 1 &amp;&amp; \text{(enforce circle when graph is not connected)}\\
+\forall \{u,v\}\in E: 2x_{uv} - x_u - x_v \leq 0 &amp;&amp; \text{(require vertices to be chosen when edge is chosen)}\\
+\forall i \in V: x_i-\sum_{u=i \vee v=i}x_{uv} \leq 0 &amp;&amp; \text{(forbid isolated vertices)}\\
+\end{align*}</div><p>The callbacks add a new constraint for each cycle <span class="math notranslate nohighlight">\(C\)</span> of length <span class="math notranslate nohighlight">\(\ell(C)\)</span>
+coming up in a solution candidate:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\sum_{\{u, v\} \in C} x_{uv} &lt; \ell(C) &amp;&amp; \text{(forbid including complete cycle)}
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.pcst.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.pcst.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.pcst.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal prize collecting Steiner tree in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an ILPGraph</p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for Prize Collecting Steiner tree</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal prize collecting Steiner tree</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.pcst_linear"></span><dl class="py function">
+<dt id="graphilp.network.pcst_linear.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.pcst_linear.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forced_terminals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prize'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.pcst_linear.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the Prize Collecting Steiner Tree Problem.</p>
+<p>This formulation enforces a cycle in the solution if it is not connected.
+Cycles are then forbidden by enforcing an increasing labelling along the edges of the solution.
+To this end, the formulation is working with a directed graph internally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>forced_terminals</strong> – list of terminals that have to be connected</p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+<li><p><strong>prize</strong> – name of the argument in the vertex dictionary of the graph used to store vertex prize values</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tree in G connecting all terminals</p></li>
+<li><p><strong>lower_bound</strong> – give a known lower bound to the solution length</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(n\)</span> be the number of vertices in the graph and  <span class="math notranslate nohighlight">\(T_f\)</span> be the set of forced terminals required to be part of the solution.
+Further, let <span class="math notranslate nohighlight">\(p_v\)</span> be the prize associated with each vertex <span class="math notranslate nohighlight">\(v\)</span> and
+<span class="math notranslate nohighlight">\(\overrightarrow{E} := \{(u, v), (v, u) \mid \{u, v\} \in E\}\)</span>
+be the directed edge set used in the internal representation.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{v \in V} p_v x_v- \sum_{(u,v) \in E} w_{uv} x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall \{u,v\}\in E: x_{uv} + x_{vu} \leq 1 &amp;&amp; \text{(restrict edges to one direction)}\\
+\forall t \in T_f: x_t = 1 &amp;&amp; \text{(require forced terminals}\\
+&amp;&amp; \text{to be chosen)}\\
+\sum_{v\in V} x_v - \sum_{(u,v) \in \overrightarrow{E}} x_{uv} = 1 &amp;&amp; \text{(enforce circle when graph}\\
+&amp;&amp; \text{is not connected)}\\
+\forall \{u,v\}\in E: 2(x_{uv}+x_{vu}) - x_u - x_v \leq 0 &amp;&amp; \text{(require vertices to be chosen}\\
+&amp;&amp; \text{when edge is chosen)}\\
+\forall i \in V: x_i-\sum_{u=i \vee v=i}x_{uv} \leq 0 &amp;&amp; \text{(forbid isolated vertices)}\\
+\forall \{u,v\}\in E: n x_{uv} + \ell_v - \ell_u \geq 1 - n(1-x_{vu}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall \{u,v\}\in E: n x_{vu} + \ell_u - \ell_v \geq 1 - n(1-x_{uv}) &amp;&amp; \text{(enforce increasing labels)}\\
+\forall v \in V: \sum_{(u,v) \in \overrightarrow{E}} x_{uv} \leq 1 &amp;&amp; \text{(only one arrow into each vertex)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.pcst_linear.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.pcst_linear.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.pcst_linear.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal prize collecting Steiner tree in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for Prize Collecting Steiner tree</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal prize collecting Steiner tree</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.atsp"></span><dl class="py function">
+<dt id="graphilp.network.atsp.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.atsp.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.atsp.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the min/max asymmetric TSP</p>
+<p>Uses <a class="reference internal" href="#graphilp.network.gen_path_atsp.create_model" title="graphilp.network.gen_path_atsp.create_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">graphilp.network.gen_path_atsp.create_model()</span></code></a> to set up the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight tour, GRB.MINIMIZE for minimum weight tour</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.atsp.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.atsp.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.atsp.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal tour in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for min/max asymmetric TSP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal tour in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.atsp_desrochers_laporte"></span><dl class="py function">
+<dt id="graphilp.network.atsp_desrochers_laporte.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.atsp_desrochers_laporte.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.atsp_desrochers_laporte.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Faster formulation for the min/max asymmetric TSP</p>
+<p>This formulation implements a formulation from Desrochers and Laporte (1990):
+<a class="reference external" href="https://doi.org/10.1016/0167-6377(91)90083-2">Improvements and extensions to the Miller–Tucker–Zemlin subtour elimination constraints</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a complete weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight tour, GRB.MINIMIZE for minimum weight tour</p></li>
+<li><p><strong>metric</strong> – ‘metric’ for symmetric problem otherwise asymmetric problem</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(s\)</span> be an arbitrary starting node for the tour.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min / \max \sum_{(u,v) \in E} w_{uv} x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall v \in V: \sum_{(u, v) \in E}x_{uv} = 1 &amp;&amp; \text{(exactly one incoming edge)}\\
+\forall u \in V: \sum_{(u, v) \in E}x_{uv} = 1 &amp;&amp; \text{(exactly one outgoing edge)}\\
+\forall u, v \in V \setminus \{s\}: \\
+\ell_u - \ell_v + (n-1)x_{uv} + (n-3)x_{vu} \leq n-2
+&amp;&amp; \text{(labels increase by one in edge direction)}\\
+\\
+\forall u \in V \setminus \{s\}:\\
+-\ell_u + (n-3)x_{us} + \sum_{v \in V \setminus \{s\}}x_{vu} \leq -1
+&amp;&amp; \text{(subtour elimination)}\\
+\\
+\forall u \in V \setminus \{s\}:\\
+\ell_u + (n-3)x_{su} + \sum_{v \in V \setminus \{s\}}x_{uv} \leq n-1
+&amp;&amp; \text{(subtour elimination)}\\
+\end{align*}</div></dd>
+<dt>References:</dt><dd><p>See Roberti and Toth: <a class="reference external" href="https://link.springer.com/article/10.1007/s13676-012-0010-0">Models and algorithms for the Asymmetric Traveling Salesman Problem:
+an experimental comparison</a>
+for this formulation in context.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.atsp_desrochers_laporte.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.atsp_desrochers_laporte.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.atsp_desrochers_laporte.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal tour in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a complete weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for min/max asymmetric TSP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal tour in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.gen_path_atsp"></span><dl class="py function">
+<dt id="graphilp.network.gen_path_atsp.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.gen_path_atsp.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.gen_path_atsp.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the min/max path asymmetric TSP</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight tour, GRB.MINIMIZE for minimum weight tour</p></li>
+<li><p><strong>metric</strong> – ‘metric’ for symmetric problem otherwise asymmetric problem</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>start</strong> – require the TSP path to start at this vertex</p></li>
+<li><p><strong>end</strong> – require the TSP path to end at this vertex</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(s\)</span> be the start vertex (if it is specified), <span class="math notranslate nohighlight">\(e\)</span> the end vertex,
+and <span class="math notranslate nohighlight">\(n\)</span> the number of vertices.
+If no start vertex is given, let <span class="math notranslate nohighlight">\(s\)</span> be any fixed vertex.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min / \max \sum_{(u,v) \in E} w_{uv} x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall v \in V \setminus \{s, e\}: \sum_{(u, v) \in E}x_{uv} = 1 &amp;&amp; \text{(exactly one incoming edge)}\\
+\forall v \in V \setminus \{s, e\}: \sum_{(v, u) \in E}x_{vu} = 1 &amp;&amp; \text{(exactly one outgoing edge)}\\
+\sum_{(s, v) \in E}x_{sv} = 1 &amp;&amp; \text{(exactly one outgoing edge from start vertex)}\\
+\sum_{(v, e) \in E}x_{ve} = 1 &amp;&amp; \text{(exactly one incoming edge to end vertex)}\\
+\sum_{(v, s) \in E}x_{vs} = 0 &amp;&amp; \text{(no incoming edge to start vertex)}\\
+\sum_{(e, v) \in E}x_{ev} = 0 &amp;&amp; \text{(no outgoing edge from end vertex)}\\
+\ell_s = 0 &amp;&amp; \text{(start vertex has label 0)}\\
+\ell_e = n-1 &amp;&amp; \text{(end vertex has label } n-1 \text{)}\\
+\forall (u,v) \in E \setminus \{(u, s)\mid u \in V \}:\\
+\ell_u - \ell_v + nx_{uv} \leq n-1 &amp;&amp; \text{(increasing labels along tour)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.gen_path_atsp.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.gen_path_atsp.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.gen_path_atsp.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal tour in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for min/max path asymmetric TSP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal tour/path in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.path_atsp"></span><dl class="py function">
+<dt id="graphilp.network.path_atsp.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.path_atsp.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.path_atsp.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the min/max asymmetric path TSP</p>
+<p>Uses <a class="reference internal" href="#graphilp.network.gen_path_atsp.create_model" title="graphilp.network.gen_path_atsp.create_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">graphilp.network.gen_path_atsp.create_model()</span></code></a> to set up the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>start</strong> – a vertex of the graph G in which the ATSP path should start</p></li>
+<li><p><strong>end</strong> – a vertex of the graph G in which the ATSP path should end</p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight tour, GRB.MINIMIZE for minimum weight tour</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.path_atsp.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.path_atsp.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.path_atsp.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal tour in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for min/max asymmetric path TSP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal tour in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.path_tsp"></span><dl class="py function">
+<dt id="graphilp.network.path_tsp.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.path_tsp.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.path_tsp.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the min/max metric path TSP</p>
+<p>Uses <a class="reference internal" href="#graphilp.network.gen_path_atsp.create_model" title="graphilp.network.gen_path_atsp.create_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">graphilp.network.gen_path_atsp.create_model()</span></code></a> to set up the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>start</strong> – a vertex of the graph G in which the TSP path should start</p></li>
+<li><p><strong>end</strong> – a vertex of the graph G in which the TSP path should end</p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight tour, GRB.MINIMIZE for minimum weight tour</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.path_tsp.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.path_tsp.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.path_tsp.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal tour in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for min/max metric path TSP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal tour in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.tsp"></span><dl class="py function">
+<dt id="graphilp.network.tsp.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.tsp.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.tsp.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the min/max metric TSP</p>
+<p>Uses <a class="reference internal" href="#graphilp.network.gen_path_atsp.create_model" title="graphilp.network.gen_path_atsp.create_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">graphilp.network.gen_path_atsp.create_model()</span></code></a> to set up the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight tour, GRB.MINIMIZE for minimum weight tour</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_tsp_art.png" src="_images/example_tsp_art.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/TSP%20Art.ipynb">TSP art</a></p>
+<p>Transform an image into line art that can be drawn without lifting the pencil.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.tsp.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.tsp.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.tsp.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal tour in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for min/max metric TSP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal tour in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.tsp_callbacks"></span><dl class="py function">
+<dt id="graphilp.network.tsp_callbacks.callback_cycle">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.tsp_callbacks.</span></code><code class="sig-name descname"><span class="pre">callback_cycle</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.tsp_callbacks.callback_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback inserts constraints to forbid more than one cycle in solution candidates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – <p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p></li>
+<li><p><strong>where</strong> – a Gurobi callback parameter indicating from which step of the optimisation the callback
+originated</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.tsp_callbacks.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.tsp_callbacks.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.tsp_callbacks.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the min/max path asymmetric TSP</p>
+<p>This formulation enforces that the solution has at least one cycle.
+A callback will detect if there is more than one cycle and adds constraints to explicity forbid this.
+Together, this ensures that the solution is a valid tour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight tour, GRB.MINIMIZE for minimum weight tour</p></li>
+<li><p><strong>metric</strong> – ‘metric’ for symmetric problem otherwise asymmetric problem</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>start</strong> – require the TSP path to start at this vertex</p></li>
+<li><p><strong>end</strong> – require the TSP path to end at this vertex</p></li>
+<li><p><strong>warmstart</strong> – a list of edges forming a tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>Callbacks:</dt><dd><p>This model uses callbacks which need to be included when calling Gurobi’s optimize function:</p>
+<p>model.optimize(callback = <code class="xref py py-obj docutils literal notranslate"><span class="pre">callbackCycle</span></code>)</p>
+</dd>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(s\)</span> be the start node (if it is specified) and <span class="math notranslate nohighlight">\(e\)</span> the end node.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min / \max \sum_{(i,j) \in E} w_{ij} x_{ij}\\
+\text{s.t.} &amp;&amp;\\
+\forall v \in V \setminus \{s, e\}: \sum_{(u, v) \in R}x_{uv} = 1 &amp;&amp; \text{(Exactly one outgoing edge.)}\\
+\forall v \in V \setminus \{s, e\}: \sum_{(v, u) \in R}x_{vu} = 1 &amp;&amp; \text{(Exactly one incoming edge.)}\\
+\sum_{(s, v) \in R}x_{sv} = 1 &amp;&amp; \text{(Exactly one outgoing edge from start node.)}\\
+\sum_{(v, e) \in R}x_{ve} = 1 &amp;&amp; \text{(Exactly one incoming edge to end node.)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.tsp_callbacks.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.tsp_callbacks.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.tsp_callbacks.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the optimal tour in G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for min/max path asymmetric TSP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the edges of an optimal tour/path in G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.heuristics.tsp_christofides"></span><dl class="py function">
+<dt id="graphilp.network.heuristics.tsp_christofides.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.tsp_christofides.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.tsp_christofides.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximation to TSP by <a class="reference external" href="https://en.wikipedia.org/wiki/Christofides_algorithm">Christofides’s algorithm</a></p>
+<p>Creates a TSP tour from a minimum weight spanning tree by applying a minimum weight perfect matching
+to the nodes of odd degree in the spanning tree. This gives a low-weight Eulerian subgraph.
+An <a class="reference external" href="https://en.wikipedia.org/wiki/Eulerian_path">Euler tour</a> in it can be used to create
+a TSP tour by skipping over vertices that are visited more than once.</p>
+<p>This is a 3/2-approximation to the metric TSP and hence also gives a lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges forming the approximate solution and a lower bound on the optimal solution</p>
+</dd>
+</dl>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">warmstart</span><span class="p">,</span> <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">tsp_christofides</span><span class="o">.</span><span class="n">get_heuristic</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">warmstart</span><span class="o">=</span><span class="n">warmstart</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="n">lower_bound</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.heuristics.tsp_nearest_neighbour"></span><dl class="py function">
+<dt id="graphilp.network.heuristics.tsp_nearest_neighbour.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.tsp_nearest_neighbour.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.tsp_nearest_neighbour.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nearest neighbour heuristic for TSP</p>
+<p>Create a tour by greedily moving to the nearest neighbour that has not yet been visited in each step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>weight</strong> – name of the argument in the edge dictionary of the graph used to store edge cost</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges forming the approximate solution and its length</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.network.heuristics.tsp_two_opt"></span><dl class="py function">
+<dt id="graphilp.network.heuristics.tsp_two_opt.find_tour_length">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.tsp_two_opt.</span></code><code class="sig-name descname"><span class="pre">find_tour_length</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.tsp_two_opt.find_tour_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the length of a given tour</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.heuristics.tsp_two_opt.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.tsp_two_opt.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.tsp_two_opt.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>2 Opt - Improvement heuristic for the Traveling Salesman Problem</p>
+<p>Improve a tour, e.g., one returned from the Nearest Neighbour Heuristic.
+Do this by exchanging the role of two vertices <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> iteratively as follows if it leads to a shorter tour:</p>
+<p>Replace the tour</p>
+<p><span class="math notranslate nohighlight">\(s \xrightarrow{p_{su}} u \rightarrow i \xrightarrow{p_{ij}} j \rightarrow v \xrightarrow{p_{ve}} e\)</span></p>
+<p>by</p>
+<p><span class="math notranslate nohighlight">\(s \xrightarrow{p_{su}} u \rightarrow j \xrightarrow{p_{ji}} i \rightarrow v \xrightarrow{p_{ve}} e\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>tour</strong> – a list of edges describing a tour</p></li>
+<li><p><strong>length</strong> – length of the tour</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges forming the approximate solution and its length</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.heuristics.tsp_two_opt.iterate_inner">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.tsp_two_opt.</span></code><code class="sig-name descname"><span class="pre">iterate_inner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.tsp_two_opt.iterate_inner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try all ending points <span class="math notranslate nohighlight">\(j\)</span> in the tour for swapping.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.heuristics.tsp_two_opt.iterate_outer">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.tsp_two_opt.</span></code><code class="sig-name descname"><span class="pre">iterate_outer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cities</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.tsp_two_opt.iterate_outer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try all starting points <span class="math notranslate nohighlight">\(i\)</span> in the tour for swapping.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.network.heuristics.tsp_two_opt.two_opt_swap">
+<code class="sig-prename descclassname"><span class="pre">graphilp.network.heuristics.tsp_two_opt.</span></code><code class="sig-name descname"><span class="pre">two_opt_swap</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tour</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.network.heuristics.tsp_two_opt.two_opt_swap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Swap two cities in the tour</p>
+<p>Replace the tour</p>
+<p><span class="math notranslate nohighlight">\(s \xrightarrow{p_{su}} u \rightarrow i \xrightarrow{p_{ij}} j \rightarrow v \xrightarrow{p_{ve}} e\)</span></p>
+<p>by</p>
+<p><span class="math notranslate nohighlight">\(s \xrightarrow{p_{su}} u \rightarrow j \xrightarrow{p_{ji}} i \rightarrow v \xrightarrow{p_{ve}} e\)</span></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="packing.html" class="btn btn-neutral float-right" title="Packing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="matching.html" class="btn btn-neutral float-left" title="Matching" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

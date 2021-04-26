@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Sub- and supergraphs &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Partitioning" href="partitioning.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sub- and supergraphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#clique">Clique</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#packing-version">Packing version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#covering-version">Covering version</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.sub_super.max_clique_pack">Details</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Sub- and supergraphs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/sub_super.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sub-and-supergraphs">
+<span id="subsuper"></span><h1>Sub- and supergraphs<a class="headerlink" href="#sub-and-supergraphs" title="Permalink to this headline">¶</a></h1>
+<p>Many questions in graph theory are revolving around the relationship between a graph and its sub-structures. Optimisation problems typically ask for the largest subgraph of a given type like a clique or a planar graph. They may also ask for the minimal modification necessary to ensure the existence of such a subgraph.</p>
+<div class="section" id="clique">
+<h2>Clique<a class="headerlink" href="#clique" title="Permalink to this headline">¶</a></h2>
+<p>A clique is a fully connected graph. Hence, the fully connected graph <span class="math notranslate nohighlight">\(K_n\)</span> is also called an <span class="math notranslate nohighlight">\(n\)</span>-clique.
+The maximum clique problem is asking for the largest <span class="math notranslate nohighlight">\(n\)</span> such that a given graph has an <span class="math notranslate nohighlight">\(n\)</span>-clique as a subgraph.</p>
+<div class="section" id="packing-version">
+<h3>Packing version<a class="headerlink" href="#packing-version" title="Permalink to this headline">¶</a></h3>
+<p>The packing version of the integer linear program for max clique is using a straight-forward formulation that tries to find as many vertices as possible such that every pair of selected vertices is connected by an edge.</p>
+<p>The <a class="reference internal" href="#covering-version"><span class="std std-ref">covering version</span></a> below has a tighter integrality gap. (The gap for the packing version is <span class="math notranslate nohighlight">\(\geq \frac{n}{2}\)</span>.)</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.sub_super.max_clique_pack.create_model" title="graphilp.sub_super.max_clique_pack.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the maximum clique problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.sub_super.max_clique_pack.extract_solution" title="graphilp.sub_super.max_clique_pack.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of vertices comprising a maximal clique</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="covering-version">
+<span id="id1"></span><h3>Covering version<a class="headerlink" href="#covering-version" title="Permalink to this headline">¶</a></h3>
+<p>The covering version of the integer linear program for max clique is using the connection between clique and vertex cover in the complement. It excludes as few nodes as possible from a clique but needs to exclude at least one node from each pair not connected by an edge. Vertex cover has an <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_cover#ILP_formulation">integrality gap</a> of 2.</p>
+<div class="figure" id="id3" style="text-align: left">
+<p><img  src="_images/tikz-e51c1bba0a716e564ec9c35934f2ca9b4f1aeff1.png" alt="Figure made with TikZ" /></p>
+<p class="caption"><span class="caption-text">A maximal clique (bold edges, blue vertices) and a vertex cover of the complement (red edges, green vertices).</span></p>
+</div><table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.sub_super.max_clique_cover.create_model" title="graphilp.sub_super.max_clique_cover.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the maximum clique problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.sub_super.max_clique_cover.extract_solution" title="graphilp.sub_super.max_clique_cover.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of vertices comprising a maximal clique</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-graphilp.sub_super.max_clique_pack">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.sub_super.max_clique_pack" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="graphilp.sub_super.max_clique_pack.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.sub_super.max_clique_pack.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.sub_super.max_clique_pack.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the maximum clique problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{v \in V} x_v\\
+\text{s.t.} &amp;&amp;\\
+\forall (u, v) \in \overline{E}: x_u + x_v \leq 1 &amp;&amp; \text{(ensure every pair of nodes is connected)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.sub_super.max_clique_pack.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.sub_super.max_clique_pack.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.sub_super.max_clique_pack.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of vertices comprising a maximal clique</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for maximum clique</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of vertices comprising a maximal clique</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.sub_super.max_clique_cover"></span><dl class="py function">
+<dt id="graphilp.sub_super.max_clique_cover.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.sub_super.max_clique_cover.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.sub_super.max_clique_cover.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the maximum clique problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>This formulation makes use of the connection between clique and vertex cover in the complement.
+It excludes as few nodes as possible from a clique but needs to exclude at least one node from each pair
+not connected by an edge.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{v \in V} x_v\\
+\text{s.t.} &amp;&amp;\\
+\forall (u, v) \in \overline{E}: x_u + x_v \geq 1 &amp;&amp; \text{(exclude at least one node from each unconnected pair)}\\
+\end{align*}</div></dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_mapcolouring.png" src="_images/example_mapcolouring.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/MapColouring.ipynb">Map colouring</a></p>
+<p>Colour a map with as few colours as possible such that</p>
+<p>no two adjacent areas get the same colour.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.sub_super.max_clique_cover.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.sub_super.max_clique_cover.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.sub_super.max_clique_cover.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of vertices comprising a maximal clique</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for maximum clique</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of vertices comprising a maximal clique</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="partitioning.html" class="btn btn-neutral float-left" title="Partitioning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

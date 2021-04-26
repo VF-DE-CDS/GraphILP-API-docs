@@ -1,0 +1,491 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Packing &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Partitioning" href="partitioning.html" />
+    <link rel="prev" title="Networks" href="network.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Packing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#independent-set">Independent set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clique-packing">Clique packing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-packing">Set packing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heuristics">Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.packing.max_indset">Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Packing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/packing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="packing">
+<span id="id1"></span><h1>Packing<a class="headerlink" href="#packing" title="Permalink to this headline">¶</a></h1>
+<p>Packing problems on graphs deal with the question of how to identify as many disjoint sub-structures of a given type as possible in a given graph. For example, we could try to find as many pairwise non-connected vertices as possible (maximum independent set) or as many disjoint cliques as possible (clique packing problem).</p>
+<div class="figure" id="id4" style="text-align: center">
+<p><img  src="_images/tikz-fc35c1f306c67a136f1ef454f01f5ca819cf3754.png" alt="Figure made with TikZ" /></p>
+<p class="caption"><span class="caption-text">Example of clique packing for 3-cliques (aka triangles).</span></p>
+</div><div class="section" id="independent-set">
+<h2>Independent set<a class="headerlink" href="#independent-set" title="Permalink to this headline">¶</a></h2>
+<p>An independet set in the vertex set of a graph is a subset of the vertices in which no pair of vertices is connected by an edge.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.packing.max_indset.create_model" title="graphilp.packing.max_indset.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the maximum independet set problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.packing.max_indset.extract_solution" title="graphilp.packing.max_indset.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of vertices comprising a maximum independent set</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="clique-packing">
+<h2>Clique packing<a class="headerlink" href="#clique-packing" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Clique_(graph_theory)">clique</a> is a fully connected subgraph. The clique packing problem asks for the maximal number of vertex disjoint cliques that can be found in a graph.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.packing.clique_packing.create_model" title="graphilp.packing.clique_packing.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the clique packing problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.packing.clique_packing.extract_solution" title="graphilp.packing.clique_packing.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a dictionary of vertex to clique assignments</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="set-packing">
+<h2>Set packing<a class="headerlink" href="#set-packing" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Set_packing">set packing problem</a> is asking for a maximum weight, disjoint sub-collection of the sets in a set system.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.packing.set_packing.create_model" title="graphilp.packing.set_packing.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the weighted set packing problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.packing.set_packing.extract_solution" title="graphilp.packing.set_packing.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of sets comprising a set packing</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="heuristics">
+<h3>Heuristics<a class="headerlink" href="#heuristics" title="Permalink to this headline">¶</a></h3>
+<p>The methods in this section provide approximate solutions to the set packing problem constituting admissible solutions from which to start the exact optimisation.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.packing.heuristics.setpacking_greedy.get_heuristic" title="graphilp.packing.heuristics.setpacking_greedy.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Greedy heuristic for the set packing problem</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-graphilp.packing.max_indset">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.packing.max_indset" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="graphilp.packing.max_indset.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.packing.max_indset.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.packing.max_indset.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the maximum independet set problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>This formulation creates a vertex cover and uses the fact that
+a <a class="reference external" href="https://en.wikipedia.org/wiki/Independent_set_(graph_theory)#Relationship_to_other_graph_parameters">maximum independent set</a>
+consists of the complement of the vertices in a minimum vertex cover.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{v \in V} x_v\\
+\text{s.t.} &amp;&amp;\\
+\forall (u, v) \in E: x_u + x_v \geq 1 &amp;&amp; \text{(at least one vertex must be in a vertex cover of G)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.packing.max_indset.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.packing.max_indset.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.packing.max_indset.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of vertices comprising a maximum independent set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for maximum independent set</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of vertices comprising a maximum independent set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.packing.clique_packing"></span><dl class="py function">
+<dt id="graphilp.packing.clique_packing.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.packing.clique_packing.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clique_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.packing.clique_packing.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the clique packing problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>clique_size</strong> – size of the clique to be packed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(k\)</span> be the size of the cliques to be packed, <span class="math notranslate nohighlight">\(\overline{E}\)</span> be the complement of
+the edge set, and <span class="math notranslate nohighlight">\(C = \{0, \ldots, \lfloor |V|/k \rfloor \}\)</span>
+an index set for the possible cliques packed into <span class="math notranslate nohighlight">\(G\)</span>.</p>
+<p>The ILP formulation uses the following variables:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(y_{c}\)</span></p></td>
+<td><p>Binary variables indicating whether a clique with index <span class="math notranslate nohighlight">\(c\)</span> is used.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(a_{cv}\)</span></p></td>
+<td><p>Binary variables indicating whether vertex <span class="math notranslate nohighlight">\(v\)</span> is part of the clique with index <span class="math notranslate nohighlight">\(c\)</span>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{c \in C} y_c\\
+\text{s.t.} &amp;&amp;\\
+\forall v \in V: \sum_{c \in C} a_{cv} \leq 1 &amp;&amp; \text{(each vertex can be in at most one clique)}\\
+\forall \{u, v\} \in \overline{E}: \forall c \in C:\\
+a_{cu} + a_{cv} \leq 1
+&amp;&amp; \text{(unconnected vertices cannot be in the same clique)}\\
+\forall c \in C: \sum_{v \in V} a_{cv} - k y_c = 0 &amp;&amp; \text{(chosen cliques need to have k members)}\\
+\forall c \in C: \forall v \in V: y_c - a_{cv} \geq 0
+&amp;&amp; \text{(cluster with } \geq 1 \text { vertex needs to be chosen as clique)}\\
+\end{align*}</div></dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_clique_packing.png" src="_images/example_clique_packing.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/CliquePackingExample.ipynb">Packing tetrahedra</a></p>
+<p>How many vertex disjoint tetrahedra can you pack in a grid graph?</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.packing.clique_packing.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.packing.clique_packing.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.packing.clique_packing.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dictionary of vertex to clique assignments</p>
+<p>If a vertex is not assigned to a clique, its value in the dictionary is zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for clique packing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary mapping vertices to cliques</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.packing.set_packing"></span><dl class="py function">
+<dt id="graphilp.packing.set_packing.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.packing.set_packing.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.packing.set_packing.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the weighted set packing problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>warmstart</strong> – a list of disjoint sets in the set system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(M\)</span> be the incidence matrix of the set system, <span class="math notranslate nohighlight">\(w\)</span> the vector of weights associated to
+the sets of the system, <span class="math notranslate nohighlight">\(x\)</span> a vector indicating which set is selected, and <span class="math notranslate nohighlight">\(1\)</span> a vector of ones.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max w^{\top}x\\
+\text{s.t.} &amp;&amp;\\
+Mx \leq 1 &amp;&amp; \text{(each element of the universe is in at most one set)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.packing.set_packing.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.packing.set_packing.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.packing.set_packing.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of sets comprising a set packing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for weighted set packing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of sets comprising a set packing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.packing.heuristics.setpacking_greedy"></span><dl class="py function">
+<dt id="graphilp.packing.heuristics.setpacking_greedy.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.packing.heuristics.setpacking_greedy.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.packing.heuristics.setpacking_greedy.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Greedy heuristic for the set packing problem</p>
+<p>Iteratively add the set with highest size-to-weight ratio which does not contain an element
+that is already covered to the solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of disjoint sets of the set system</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="partitioning.html" class="btn btn-neutral float-right" title="Partitioning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="network.html" class="btn btn-neutral float-left" title="Networks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

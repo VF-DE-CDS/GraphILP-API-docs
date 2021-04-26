@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Cuts and Flows &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Imports" href="imports.html" />
+    <link rel="prev" title="Covering" href="covering.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cuts and Flows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bisection">Bisection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cuts">Cuts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heuristics">Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#flows">Flows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.cuts_flows.bisection">Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Cuts and Flows</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/cuts_flows.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cuts-and-flows">
+<span id="cuts-flows"></span><h1>Cuts and Flows<a class="headerlink" href="#cuts-and-flows" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Cut_(graph_theory)">Cuts</a> in graphs describe how removing some elements of the graph result in a certain segmentation of the graph. A typical question is what the minimal number of edges is that need to be removed in order for a connected graph to be separated into two connected components.</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Flow_network">Flows</a> are functions on the edges of directed graphs describing how much of a commodity is flowing from one vertex to another. Often, the condition that the total flow into a vertex equals the total flow out of the vertex is imposed. The prototypical questions is how much flow can be transferred from one given vertex to another when the flow must not exceed the edge weights of the graph.</p>
+<p>Cuts and flows between vertices are related through the famous <a class="reference external" href="https://en.wikipedia.org/wiki/Max-flow_min-cut_theorem">max-flow min-cut theorem</a>. This theorem is implied by linear programming <a class="reference external" href="https://en.wikipedia.org/wiki/Duality_(optimization)">duality</a>.</p>
+<div class="section" id="bisection">
+<h2>Bisection<a class="headerlink" href="#bisection" title="Permalink to this headline">¶</a></h2>
+<p>Graph bisection deals with the question of how to cut edges in a connected graph so that the resulting graph has two connected components. Typically, there are restrictions to the type of the resulting connected components such as that their sizes should be as close to each other as possible. The optimisation objective is usually the sum of the weights of those edges that are removed to bisect the graph.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.cuts_flows.bisection.create_model" title="graphilp.cuts_flows.bisection.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the minimum/maximum bisection problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.cuts_flows.bisection.extract_solution" title="graphilp.cuts_flows.bisection.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of vertices comprising a minimum/maximum balanced cut of G</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cuts">
+<h2>Cuts<a class="headerlink" href="#cuts" title="Permalink to this headline">¶</a></h2>
+<p>A cut in a graph is a partition of the vertex set into two disjoint subsets.
+A <a class="reference external" href="https://en.wikipedia.org/wiki/Maximum_cut">maximum cut</a> is a cut for which the total weight of the edges between the two sets is maximal.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.cuts_flows.max_cut.create_model" title="graphilp.cuts_flows.max_cut.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the maximum weight cut problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.cuts_flows.max_cut.extract_solution" title="graphilp.cuts_flows.max_cut.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of vertices comprising a maximum cut of G</p></td>
+</tr>
+</tbody>
+</table>
+<p>The minimum uncut problem is complementary to the maximum cut problem. It asks for a cut that minimises the total number of edges which are not cut.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.cuts_flows.min_uncut.create_model" title="graphilp.cuts_flows.min_uncut.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the min uncut problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.cuts_flows.min_uncut.extract_solution" title="graphilp.cuts_flows.min_uncut.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of vertices comprising a maximum cut of the complement graph</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="heuristics">
+<h3>Heuristics<a class="headerlink" href="#heuristics" title="Permalink to this headline">¶</a></h3>
+<p>The methods in this section provide approximate solutions to the max cut problem constituting admissible solutions from which to start the exact optimisation.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.cuts_flows.heuristics.maxcut_greedy.get_heuristic" title="graphilp.cuts_flows.heuristics.maxcut_greedy.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Max cut greedy heuristic</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="flows">
+<h2>Flows<a class="headerlink" href="#flows" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.cuts_flows.min_k_flow.create_model" title="graphilp.cuts_flows.min_k_flow.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the <a class="reference external" href="https://en.wikipedia.org/wiki/Nowhere-zero_flow">minimum k-flow problem</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.cuts_flows.min_k_flow.extract_solution" title="graphilp.cuts_flows.min_k_flow.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get the flow bound and a dictionary of edge weights realising a flow</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-graphilp.cuts_flows.bisection">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.cuts_flows.bisection" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="graphilp.cuts_flows.bisection.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.bisection.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.bisection.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the minimum/maximum bisection problem</p>
+<p>Bisect the graph into two partitions of equal size (allowing some slack) such that
+the sum of the weights of the edges removed to bisect the graph is minimal/maximal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>slack</strong> – allow imbalance between the two partitions by slack many nodes</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight bisection, GRB.MINIMIZE for minimum weight bisection</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(s\)</span> denote the slack allowed in the partition size.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+&amp; \min / \max_{\{u,v\} \in E} \sum x_{u,v}\\
+&amp; \text{s.t.} &amp;\\
+&amp; \sum_{v \in V} x_v \leq \lceil |V|/2 \rceil + s &amp; \text{(lower bound size of one partition)}\\
+&amp; \sum_{v \in V} x_v \geq \lfloor |V|/2 \rfloor - s &amp; \text{(upper bound size of one partition)}\\
+&amp; \forall \{u,v\} \in E: x_{u, v} \leq x_u + x_v &amp; \text{(no edge between partitions)}\\
+&amp; \forall \{u,v\} \in E: x_{u, v} \leq 2 - x_u - x_v &amp; \text{(no edge between partitions)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.cuts_flows.bisection.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.bisection.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.bisection.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of vertices comprising a minimum/maximum balanced cut of G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for the minimum/maximum bisection problem</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of vertices comprising a minimum/maximum balanced cut of G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.cuts_flows.max_cut"></span><dl class="py function">
+<dt id="graphilp.cuts_flows.max_cut.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.max_cut.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.max_cut.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the maximum weight cut problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>warmstart</strong> – a list of vertices inducing a cut</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{(u,v) \in E} w_{uv}x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall (u,v) \in E: x_{uv} &amp; \leq x_u + x_v &amp; \text{(for every edge, the nodes must be separated )}\\
+\forall (u,v) \in E: x_{uv} &amp; \leq 2 - x_u - x_v &amp; \text{(for every edge, the nodes must be separated )}\\
+\end{align*}</div></dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_binarisation.png" src="_images/example_binarisation.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/Binarisation.ipynb">Maximum weight cuts</a></p>
+<p>Use maximum weight cuts for image binarisation.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.cuts_flows.max_cut.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.max_cut.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.max_cut.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of vertices comprising a maximum cut of G</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for max weight cut</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of vertices comprising a maximum weight cut of G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.cuts_flows.heuristics.maxcut_greedy"></span><dl class="py function">
+<dt id="graphilp.cuts_flows.heuristics.maxcut_greedy.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.heuristics.maxcut_greedy.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.heuristics.maxcut_greedy.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Max cut greedy heuristic</p>
+<p>The heuristic greedily assigns vertices to either Set A or Set B depending on which choice leads
+to the more expensive cut.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a pair cut_set, cut_cost of a subset of the vertices inducing a maximum weight cut
+and the cost of the cut</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.cuts_flows.min_uncut"></span><dl class="py function">
+<dt id="graphilp.cuts_flows.min_uncut.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.min_uncut.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.min_uncut.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the min uncut problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(\bar{G} = (V, \bar{E} := \{\{u, v\} \in V\times V \mid \{u, v\} \not\in E\})\)</span>
+be the complement of the input graph <span class="math notranslate nohighlight">\(G\)</span>.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{(u,v) \in \bar{E}}x_{uv}\\
+\text{s.t.} &amp;&amp;\\
+\forall (u,v) \in \bar{E}: x_{uv} &amp; \leq x_u + x_v &amp; \text{(for every edge, the nodes must be separated )}\\
+\forall (u,v) \in \bar{E}: x_{uv} &amp; \leq 2 - x_u - x_v &amp; \text{(for every edge, the nodes must be separated )}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.cuts_flows.min_uncut.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.min_uncut.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.min_uncut.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of vertices comprising a maximum cut of the complement graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Model</dt>
+<dd class="field-even"><p>a solved Gurobi model for minimum uncut problem</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of vertices comprising a cut and a solution to the minimum uncut problem</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.cuts_flows.min_k_flow"></span><dl class="py function">
+<dt id="graphilp.cuts_flows.min_k_flow.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.min_k_flow.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.min_k_flow.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the <a class="reference external" href="https://en.wikipedia.org/wiki/Nowhere-zero_flow">minimum k-flow problem</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\min k\\
+\text{s.t.} &amp;&amp;\\
+\forall v \in V: \sum_{(v,u)\in E} x_{vu} - \sum_{(u,v)\in E} x_{uv} &amp;= 0 &amp; \text{(flow condition)}\\
+\forall (u,v) \in E: x_{uv}-k &amp;\leq -1 &amp; \text{(flow bounded by k)}\\
+\forall (u,v) \in E: x_{uv}+k &amp;\geq 1 &amp; \text{(flow bounded by k)}\\
+\forall (u,v) \in E: 2|E|\sigma_{uv} + x_{uv} &amp;\geq 1 &amp; \text{(nowhere zero)}\\
+\forall (u,v) \in E: 2|E|(1-\sigma_{uv}) - x_{uv} &amp;\geq 1 &amp; \text{(nowhere zero)}\\
+\end{align*}</div><p>We assume an arbitrary orientation of the graph as given by the order of nodes in each edge.
+Binary sign variables <span class="math notranslate nohighlight">\(\sigma_{uv}\)</span> indicate whether the flow value on an edge is positive
+(<span class="math notranslate nohighlight">\(\sigma_{uv}=1\)</span>) or negative (<span class="math notranslate nohighlight">\(\sigma_{uv}=0\)</span>).</p>
+</dd>
+<dt>References:</dt><dd><p>Diestel: <a class="reference external" href="http://diestel-graph-theory.com">Graph Theory</a>, Chapter 6.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.cuts_flows.min_k_flow.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.cuts_flows.min_k_flow.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.cuts_flows.min_k_flow.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the flow bound and a dictionary of edge weights realising a flow</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for minimum k-flow</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the minimal flow bound k and a dictionary of edge weights realising a flow</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="imports.html" class="btn btn-neutral float-right" title="Imports" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="covering.html" class="btn btn-neutral float-left" title="Covering" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

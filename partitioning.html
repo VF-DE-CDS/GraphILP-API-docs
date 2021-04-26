@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Partitioning &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sub- and supergraphs" href="sub_super.html" />
+    <link rel="prev" title="Packing" href="packing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Partitioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vertex-colouring">Vertex colouring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heuristics">Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.partitioning.min_vertex_coloring">Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Partitioning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/partitioning.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="partitioning">
+<span id="id1"></span><h1>Partitioning<a class="headerlink" href="#partitioning" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Graph_partition">Graph partitioning</a> deals with ways to partition the vertex set or the edge set of a graph into mutually exclusive groups. These may be used to reduce problems on large graphs to problems on smaller graphs derived from the parts of the partition.</p>
+<div class="section" id="vertex-colouring">
+<h2>Vertex colouring<a class="headerlink" href="#vertex-colouring" title="Permalink to this headline">¶</a></h2>
+<p>A vertex <a class="reference external" href="https://en.wikipedia.org/wiki/Graph_coloring">colouring</a> of a graph is an assignment of colours to the vertices such that adjacent vertices get different colours. A minimal vertex colouring is such a colouring using the minimal possible number of colours. For example, trees can be coloured using only two colours whereas a complete graph on <span class="math notranslate nohighlight">\(n\)</span> vertices needs exactly <span class="math notranslate nohighlight">\(n\)</span> colours.</p>
+<div class="figure" id="id2" style="text-align: left">
+<p><img  src="_images/tikz-17ef0cbfd78685cfc3d3a27b735365b9819cb3cb.png" alt="Figure made with TikZ" /></p>
+<p class="caption"><span class="caption-text">Examples of minimal vertex colourings</span></p>
+</div><table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.partitioning.min_vertex_coloring.create_model" title="graphilp.partitioning.min_vertex_coloring.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for minimum vertex colouring.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.partitioning.min_vertex_coloring.extract_solution" title="graphilp.partitioning.min_vertex_coloring.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a dictionary mapping colours to lists of vertices</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="heuristics">
+<h3>Heuristics<a class="headerlink" href="#heuristics" title="Permalink to this headline">¶</a></h3>
+<p>Approximate solutions can be used as a warmstart in the optimisation, usually leading to shorter running times.
+Constant factor approximations also imply a lower bound on the solution.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.partitioning.heuristics.vertex_coloring_greedy.get_heuristic" title="graphilp.partitioning.heuristics.vertex_coloring_greedy.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Greedy colouring heuristic</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-graphilp.partitioning.min_vertex_coloring">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.partitioning.min_vertex_coloring" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="graphilp.partitioning.min_vertex_coloring.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.partitioning.min_vertex_coloring.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_num_colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.partitioning.min_vertex_coloring.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for minimum vertex colouring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>bound_num_colors</strong> – an upper bound on the number of colours needed in a minimum vertex colouring</p></li>
+<li><p><strong>warmstart</strong> – a dictionary mapping vertices to colours such that connected vertices have different colours</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>We allow for up to <span class="math notranslate nohighlight">\(H\)</span> colours to be used in the solution (if no better bound is given
+by bound_num_colors, assume <span class="math notranslate nohighlight">\(H=|V|\)</span>) and introduce variables <span class="math notranslate nohighlight">\(w_i\)</span> indicating whether
+colour <span class="math notranslate nohighlight">\(i\)</span> is used in the solution. Variables <span class="math notranslate nohighlight">\(x_{vi}\)</span> indicate whether colour <span class="math notranslate nohighlight">\(i\)</span>
+is assigned to vertex <span class="math notranslate nohighlight">\(v\)</span>.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{1\le i \le H}w_{i} &amp;&amp; \text{ (minimize the total number of colours used) }\\
+\text{s.t.} \\
+\forall v\in V: \sum_{i=1}^{H} x_{vi} = 1\ &amp;&amp; \text{ (every vertex gets exactly one colour) } \\
+\forall(u,v)\in E, i \in \{1,\ldots,H\}:\\
+x_{ui}+x_{vi}\le w_{i}\ &amp;&amp; \text{ (neighbours do not get the same colour) } \\
+\forall v\in V, i \in \{1,\ldots, H\}:\\
+x_{vi},w_{i}\in\{0,1\}\ &amp;&amp; \text{ (assigning a colour is a binary decision) }\\
+\forall i\in\{1, \ldots, H-1\}: w_{i} \leq w_{i-1} &amp;&amp;
+\text{(only assign colour } i \text{ if colour } i-1 \text{ is assigned)}
+\end{align*}</div></dd>
+<dt>Examples:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_mapcolouring.png" src="_images/example_mapcolouring.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/MapColouring.ipynb">Map colouring</a></p>
+<p>Colour a map with as few colours as possible such that</p>
+<p>no two adjacent areas get the same colour.</p>
+</td>
+</tr>
+<tr class="row-even"><td><img alt="_images/example_vertexcolour.png" src="_images/example_vertexcolour.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/MinVertexColouring.ipynb">Minimum vertex cover</a></p>
+<p>A simple example finding the minimal number of colours needed</p>
+<p>to colour circle graphs such that neighbouring nodes get different colours.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.partitioning.min_vertex_coloring.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.partitioning.min_vertex_coloring.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.partitioning.min_vertex_coloring.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dictionary mapping colours to lists of vertices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for the minimum Steiner tree problem</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary mapping colours to lists of vertices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.partitioning.heuristics.vertex_coloring_greedy"></span><dl class="py function">
+<dt id="graphilp.partitioning.heuristics.vertex_coloring_greedy.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.partitioning.heuristics.vertex_coloring_greedy.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.partitioning.heuristics.vertex_coloring_greedy.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Greedy colouring heuristic</p>
+<p>(explanation and code: <a class="reference external" href="https://en.wikipedia.org/wiki/Greedy_coloring">https://en.wikipedia.org/wiki/Greedy_coloring</a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>two dictionaries: {color_1:[list_of_color_1_nodes], …} and {node_1:color_of_node_1, …}</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="sub_super.html" class="btn btn-neutral float-right" title="Sub- and supergraphs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="packing.html" class="btn btn-neutral float-left" title="Packing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Imports &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Matching" href="matching.html" />
+    <link rel="prev" title="Cuts and Flows" href="cuts_flows.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Imports</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ilpgraph">ILPGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#networkx">NetworkX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-file-formats">Graph file formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ilpsetsystem">ILPSetSystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.imports.ilpgraph">Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Imports</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/imports.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="imports">
+<span id="id1"></span><h1>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h1>
+<p>Internally, GraphILP wraps the <a class="reference external" href="https://networkx.org">NetworkX</a> classes to represent graphs.
+This makes it particularly easy to import graphs through the functionality provided by this package.
+There are, however, a number of file formats specific to the types of optimisation problems covered by GraphILP.
+This module therefore offers import filters for such file formats.</p>
+<div class="section" id="ilpgraph">
+<h2>ILPGraph<a class="headerlink" href="#ilpgraph" title="Permalink to this headline">¶</a></h2>
+<p>The ILPGraph class takes care of both the graph instance used in an optimisation problem and the variables of the integer linear program used to solve it.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></td>
+<td><p>Wrapper class for graph instances and variables of a related integer linear program</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.imports.ilpgraph.ILPGraph.set_nx_graph" title="graphilp.imports.ilpgraph.ILPGraph.set_nx_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPGraph.set_nx_graph</span></code></a></p></td>
+<td><p>Set the underlying NetworkX graph</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.ilpgraph.ILPGraph.set_edge_vars" title="graphilp.imports.ilpgraph.ILPGraph.set_edge_vars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPGraph.set_edge_vars</span></code></a></p></td>
+<td><p>Set the dictionary of edge variables</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.imports.ilpgraph.ILPGraph.set_node_vars" title="graphilp.imports.ilpgraph.ILPGraph.set_node_vars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPGraph.set_node_vars</span></code></a></p></td>
+<td><p>Set the dictionary of node variables</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.ilpgraph.ILPGraph.set_label_vars" title="graphilp.imports.ilpgraph.ILPGraph.set_label_vars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPGraph.set_label_vars</span></code></a></p></td>
+<td><p>Set the dictionary of node label variables</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="networkx">
+<h2>NetworkX<a class="headerlink" href="#networkx" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://networkx.org">NetworkX</a> is a Python package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks.
+GraphILP is using NetworkX objects both to represent graphs internally and as an interface to provide problem instances.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.networkx.read" title="graphilp.imports.networkx.read"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read</span></code></a></p></td>
+<td><p>Wrap a NetworkX graph class by an ILPGraph class</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="graph-file-formats">
+<h2>Graph file formats<a class="headerlink" href="#graph-file-formats" title="Permalink to this headline">¶</a></h2>
+<p>Many useful benchmark instances for optimisation problems on graphs are available from a variety of sources.
+In this section, we provide import filters to create NetworkX Graph objects from various specialised file formats.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.graph_formats.edges_to_networkx" title="graphilp.imports.graph_formats.edges_to_networkx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges_to_networkx</span></code></a></p></td>
+<td><p>Creates a NetworkX Graph from an .edges file (<a class="reference external" href="http://networkrepository.com">Network Repository format</a>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.imports.graph_formats.stp_to_networkx" title="graphilp.imports.graph_formats.stp_to_networkx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stp_to_networkx</span></code></a></p></td>
+<td><p>Creates a NetworkX Graph from an .stp file (<a class="reference external" href="http://steinlib.zib.de/format.php">SteinLib format</a>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.graph_formats.mis_to_networkx" title="graphilp.imports.graph_formats.mis_to_networkx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mis_to_networkx</span></code></a></p></td>
+<td><p>Creates a NetworkX Graph from a .mis file (ASCII DIMACS graph format).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="ilpsetsystem">
+<h2>ILPSetSystem<a class="headerlink" href="#ilpsetsystem" title="Permalink to this headline">¶</a></h2>
+<p>The ILPSetSystem class takes care of both the set system instance used in an optimisation problem and the variables of the integer linear program used to solve it.</p>
+<p>A set system (or undirected <a class="reference external" href="https://en.wikipedia.org/wiki/Hypergraph">hypergraph</a>) consists of a universe <span class="math notranslate nohighlight">\(U\)</span> generalising the vertex set of a graph and a generalised edge set called the system of the graph. Each element of the system is a subset of the universe and hence generalises the notion of an edge which is a two element subset of the universe.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></td>
+<td><p>Wrapper class for set systems (undirected hyper graphs)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe" title="graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPSetSystem.set_universe</span></code></a></p></td>
+<td><p>Set the universe of the set system</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_system" title="graphilp.imports.ilpsetsystem.ILPSetSystem.set_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPSetSystem.set_system</span></code></a></p></td>
+<td><p>Set the names of the sets in the system</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_inc_matrix" title="graphilp.imports.ilpsetsystem.ILPSetSystem.set_inc_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPSetSystem.set_inc_matrix</span></code></a></p></td>
+<td><p>Set the incidence matrix of the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_system_vars" title="graphilp.imports.ilpsetsystem.ILPSetSystem.set_system_vars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPSetSystem.set_system_vars</span></code></a></p></td>
+<td><p>Set the dictionary of indicator variables for the elements of the system</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe_vars" title="graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe_vars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ILPSetSystem.set_universe_vars</span></code></a></p></td>
+<td><p>Set the dictionary of indicator variables for elements of the universe</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-graphilp.imports.ilpgraph">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.imports.ilpgraph" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="graphilp.imports.ilpgraph.ILPGraph">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">graphilp.imports.ilpgraph.</span></code><code class="sig-name descname"><span class="pre">ILPGraph</span></code><a class="headerlink" href="#graphilp.imports.ilpgraph.ILPGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper class for graph instances and variables of a related integer linear program</p>
+<dl class="py method">
+<dt id="graphilp.imports.ilpgraph.ILPGraph.set_edge_vars">
+<code class="sig-name descname"><span class="pre">set_edge_vars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpgraph.ILPGraph.set_edge_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the dictionary of edge variables</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variables</strong> – a dictionary with variable names as keys and gurobipy variables as values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="graphilp.imports.ilpgraph.ILPGraph.set_label_vars">
+<code class="sig-name descname"><span class="pre">set_label_vars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpgraph.ILPGraph.set_label_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the dictionary of node label variables</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variables</strong> – a dictionary with variable names as keys and gurobipy variables as values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="graphilp.imports.ilpgraph.ILPGraph.set_node_vars">
+<code class="sig-name descname"><span class="pre">set_node_vars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpgraph.ILPGraph.set_node_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the dictionary of node variables</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variables</strong> – a dictionary with variable names as keys and gurobipy variables as values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="graphilp.imports.ilpgraph.ILPGraph.set_nx_graph">
+<code class="sig-name descname"><span class="pre">set_nx_graph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpgraph.ILPGraph.set_nx_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the underlying NetworkX graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – a <a class="reference external" href="https://networkx.org/documentation/stable/reference/introduction.html#graphs">NetworkX graph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-graphilp.imports.ilpsetsystem"></span><dl class="py class">
+<dt id="graphilp.imports.ilpsetsystem.ILPSetSystem">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">graphilp.imports.ilpsetsystem.</span></code><code class="sig-name descname"><span class="pre">ILPSetSystem</span></code><a class="headerlink" href="#graphilp.imports.ilpsetsystem.ILPSetSystem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper class for set systems (undirected hyper graphs)</p>
+<p>Joint representation of set system instances and variables of a related integer linear program</p>
+<dl class="py method">
+<dt id="graphilp.imports.ilpsetsystem.ILPSetSystem.set_inc_matrix">
+<code class="sig-name descname"><span class="pre">set_inc_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_inc_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the incidence matrix of the system</p>
+<p>The incidence matrix indicates which element of the universe is contained in which set of the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>M</strong> – the incidence matrix of the set system</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="graphilp.imports.ilpsetsystem.ILPSetSystem.set_system">
+<code class="sig-name descname"><span class="pre">set_system</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the names of the sets in the system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>S</strong> – the system of the set system</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="graphilp.imports.ilpsetsystem.ILPSetSystem.set_system_vars">
+<code class="sig-name descname"><span class="pre">set_system_vars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_system_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the dictionary of indicator variables for the elements of the system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variables</strong> – a dictionary with variable names as keys and gurobipy variables as values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe">
+<code class="sig-name descname"><span class="pre">set_universe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the universe of the set system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – the universe of the set system</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe_vars">
+<code class="sig-name descname"><span class="pre">set_universe_vars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.ilpsetsystem.ILPSetSystem.set_universe_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the dictionary of indicator variables for elements of the universe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variables</strong> – a dictionary with variable names as keys and gurobipy variables as values</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-graphilp.imports.networkx"></span><dl class="py function">
+<dt id="graphilp.imports.networkx.read">
+<code class="sig-prename descclassname"><span class="pre">graphilp.imports.networkx.</span></code><code class="sig-name descname"><span class="pre">read</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.networkx.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap a NetworkX graph class by an ILPGraph class</p>
+<p>The wrapper class is used store the graph and the related variables of an optimisation problem
+in a single entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – a <a class="reference external" href="https://networkx.org/documentation/stable/reference/introduction.html#graphs">NetworkX graph</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an <a class="reference internal" href="#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.imports.graph_formats"></span><dl class="py function">
+<dt id="graphilp.imports.graph_formats.edges_to_networkx">
+<code class="sig-prename descclassname"><span class="pre">graphilp.imports.graph_formats.</span></code><code class="sig-name descname"><span class="pre">edges_to_networkx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.graph_formats.edges_to_networkx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a NetworkX Graph from an .edges file (<a class="reference external" href="http://networkrepository.com">Network Repository format</a>).</p>
+<p>Network Repository is a large collection of network graph data for research and benchmarking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to .edges file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://networkx.org/documentation/stable/reference/introduction.html#graphs">NetworkX Graph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.imports.graph_formats.mis_to_networkx">
+<code class="sig-prename descclassname"><span class="pre">graphilp.imports.graph_formats.</span></code><code class="sig-name descname"><span class="pre">mis_to_networkx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.graph_formats.mis_to_networkx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a NetworkX Graph from a .mis file (ASCII DIMACS graph format).</p>
+<p>This is used for maximum independet set benchmarking data
+from <a class="reference external" href="http://sites.nlsde.buaa.edu.cn/~kexu/benchmarks/graph-benchmarks.htm">BHOSLIB</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to .edges file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://networkx.org/documentation/stable/reference/introduction.html#graphs">NetworkX Graph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.imports.graph_formats.stp_to_networkx">
+<code class="sig-prename descclassname"><span class="pre">graphilp.imports.graph_formats.</span></code><code class="sig-name descname"><span class="pre">stp_to_networkx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.imports.graph_formats.stp_to_networkx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a NetworkX Graph from an .stp file (<a class="reference external" href="http://steinlib.zib.de/format.php">SteinLib format</a>).</p>
+<p><a class="reference external" href="http://steinlib.zib.de/steinlib.php">SteinLib</a> is a collection of Steiner tree
+problems in graphs and variants.</p>
+<p>The format description can be found <a class="reference external" href="http://steinlib.zib.de/format.php">here</a> on the SteinLib pages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to .stp file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://networkx.org/documentation/stable/reference/introduction.html#graphs">NetworkX Graph</a>
+and a list of terminals</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Example:</dt><dd><p>G, terminals = stp_to_networkx(“steinlib_instance.stp”)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="matching.html" class="btn btn-neutral float-right" title="Matching" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cuts_flows.html" class="btn btn-neutral float-left" title="Cuts and Flows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

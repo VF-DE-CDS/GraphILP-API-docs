@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Introduction &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Covering" href="covering.html" />
+    <link rel="prev" title="Integer linear programs for graph problems" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use">How to use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Many optimisation problems on graphs can be solved by <a class="reference external" href="https://en.wikipedia.org/wiki/Integer_programming">integer linear programming</a> (ILP). The following sketch gives an overview of a general approach for translating graph problems to integer linear programs:</p>
+<img alt="_images/graph2ilp.png" src="_images/graph2ilp.png" />
+<p>In this documentation, we will consistently use the following notation to describe our linear programs:</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Notation</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(x_{v}\)</span></p></td>
+<td><p>Binary node variables: indicator whether node <span class="math notranslate nohighlight">\(v\)</span> is part of the solution</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(x_{uv}\)</span></p></td>
+<td><p>Binary edge variables: indicator whether edge <span class="math notranslate nohighlight">\((u, v)\)</span> is part of the solution</p>
+<p>(depending on the problem, this may encode directed or undirected edges)</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(w_{uv}\)</span></p></td>
+<td><p>Edge weights: usually from the problem instance, can be any number</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\ell_v\)</span></p></td>
+<td><p>Node labels: often used to set up the problem formulation</p></td>
+</tr>
+</tbody>
+</table>
+<p>GraphILP aims at providing ILP formulations for many graph problems and making them easy to use.
+The general idea is to input a graph, select an optimisation problem, and run an optimiser on it.</p>
+<p>We are currently supporting <a class="reference external" href="https://www.gurobi.com">Gurobi</a> as an underlying ILP solver and interfacing through its Python API.</p>
+<div class="section" id="how-to-use">
+<h2>How to use<a class="headerlink" href="#how-to-use" title="Permalink to this headline">¶</a></h2>
+<p>The following figure illustrates the general usage pattern of GraphILP. It consists of creating a problem instance in the form of a graph (or hypergraph), choosing a problem, generating and solving an integer linear programming model for this problem, and finally extracting the solution.</p>
+<div class="figure" id="id3" style="text-align: center">
+<p><img  src="_images/tikz-429fb08c1e59a1fea4d7ccaa33a158a67fdb7dd4.png" alt="Figure made with TikZ" /></p>
+<p class="caption"><span class="caption-text">Usage pattern for GraphILP. Methods in red are from GraphILP, blue indicates a method from the Gurobi API.</span></p>
+</div></div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The best way to get started with GraphILP is through one of our examples:</p>
+<table class="colwidths-given docutils align-default" id="id4">
+<caption><span class="caption-text">List of examples</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_bipartite.png" src="_images/example_bipartite.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/2ColouredPartitions.ipynb">Two-coloured partitions</a></p>
+<p>Learn how to use perfect matching in bipartite graphs to find a way</p>
+<p>to connect n random blue points in the plane to n random orange points without crossings.</p>
+</td>
+</tr>
+<tr class="row-even"><td><img alt="_images/example_mapcolouring.png" src="_images/example_mapcolouring.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/MapColouring.ipynb">Map colouring</a></p>
+<p>Colour a map with as few colours as possible such that</p>
+<p>no two adjacent areas get the same colour.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><img alt="_images/example_steiner.png" src="_images/example_steiner.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/SteinerTreesOnStreetmap.ipynb">Steiner trees</a></p>
+<p>Find the shortest tree connecting a given set of nodes in a graph.</p>
+</td>
+</tr>
+<tr class="row-even"><td><img alt="_images/example_tsp_art.png" src="_images/example_tsp_art.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/TSPArt.ipynb">TSP art</a></p>
+<p>Transform an image into line art that can be drawn without lifting the pencil.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><img alt="_images/example_vertexcolour.png" src="_images/example_vertexcolour.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/MinVertexColouring.ipynb">Minimum vertex cover</a></p>
+<p>A simple example finding the minimal number of colours needed</p>
+<p>to colour circle graphs such that neighbouring nodes get different colours.</p>
+</td>
+</tr>
+<tr class="row-even"><td><img alt="_images/example_mindomset.png" src="_images/example_mindomset.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/DominatingQueens.ipynb">Minimum dominating set</a></p>
+<p>Find how many queens are needed to cover all squares on an <span class="math notranslate nohighlight">\(n\times n\)</span> chessboard.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><img alt="_images/example_binarisation.png" src="_images/example_binarisation.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/Binarisation.ipynb">Maximum weight cuts</a></p>
+<p>Use maximum weight cuts for image binarisation.</p>
+</td>
+</tr>
+<tr class="row-even"><td><img alt="_images/example_clique_packing.png" src="_images/example_clique_packing.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/CliquePackingExample.ipynb">Packing tetrahedra</a></p>
+<p>How many vertex disjoint tetrahedra can you pack in a grid graph?</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="covering.html" class="btn btn-neutral float-right" title="Covering" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Integer linear programs for graph problems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

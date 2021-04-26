@@ -1,0 +1,735 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Covering &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cuts and Flows" href="cuts_flows.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Covering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dominating-set">Dominating set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edge-dominating-set">Edge dominating set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vertex-cover">Vertex cover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heuristics">Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#knapsack">Knapsack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#k-cover">k-Cover</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-cover">Set cover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.covering.min_dom_set">Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Covering</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/covering.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="covering">
+<span id="id1"></span><h1>Covering<a class="headerlink" href="#covering" title="Permalink to this headline">¶</a></h1>
+<p>Covering problems in graphs are about finding substructures in a graph to which all other elements of the graph are adjacent. For example, in a vertex cover we look for a subset of the vertex set containing at least one end-point of each edge and hence covering all edges.</p>
+<div class="section" id="dominating-set">
+<h2>Dominating set<a class="headerlink" href="#dominating-set" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Dominating_set">dominating set</a> in a graph <span class="math notranslate nohighlight">\(G = (V, E)\)</span> is a subset <span class="math notranslate nohighlight">\(S \subset V\)</span> of the vertex set such that each vertex <span class="math notranslate nohighlight">\(v \in V\)</span> is connected to a vertex <span class="math notranslate nohighlight">\(s \in S\)</span> by an edge <span class="math notranslate nohighlight">\(\{s,v\} \in E\)</span>.</p>
+<div class="figure" id="id11" style="text-align: center">
+<p><img  src="_images/tikz-4a6e73a60fdf5eea33c73841014c36a75b39f5ac.png" alt="Figure made with TikZ" /></p>
+<p class="caption"><span class="caption-text">A minimum dominating set (red vertices) of the Petersen graph.</span></p>
+</div><table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.min_dom_set.create_model" title="graphilp.covering.min_dom_set.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the minimum dominating set problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.covering.min_dom_set.extract_solution" title="graphilp.covering.min_dom_set.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of edges comprising a dominating set</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="edge-dominating-set">
+<h2>Edge dominating set<a class="headerlink" href="#edge-dominating-set" title="Permalink to this headline">¶</a></h2>
+<p>An <a class="reference external" href="https://en.wikipedia.org/wiki/Edge_dominating_set">edge dominating set</a> in a graph <span class="math notranslate nohighlight">\(G = (V, E)\)</span> is a subset <span class="math notranslate nohighlight">\(S \subset E\)</span> of the edge set such that each edge in <span class="math notranslate nohighlight">\(E\)</span> is adjacent to an edge in <span class="math notranslate nohighlight">\(S\)</span>.</p>
+<a class="reference internal image-reference" href="_images/illustration_edge_dom.png"><img alt="_images/illustration_edge_dom.png" src="_images/illustration_edge_dom.png" style="height: 200px;" /></a>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.min_edge_dom.create_model" title="graphilp.covering.min_edge_dom.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the minimum edge dominating set problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.covering.min_edge_dom.extract_solution" title="graphilp.covering.min_edge_dom.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of edges comprising an edge dominating set</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="vertex-cover">
+<h2>Vertex cover<a class="headerlink" href="#vertex-cover" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_cover">vertex cover</a> in a graph <span class="math notranslate nohighlight">\(G = (V, E)\)</span> is a subset <span class="math notranslate nohighlight">\(S \subset V\)</span> of the vertex set such that for each edge <span class="math notranslate nohighlight">\(\{u, v\} \in E\)</span> at least one of its vertices is in <span class="math notranslate nohighlight">\(S\)</span>: <span class="math notranslate nohighlight">\(\{u,v\} \cap S \neq \emptyset\)</span>.</p>
+<a class="reference internal image-reference" href="_images/illustration_covering.png"><img alt="_images/illustration_covering.png" src="_images/illustration_covering.png" style="height: 200px;" /></a>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.min_vertexcover.create_model" title="graphilp.covering.min_vertexcover.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the minimum vertex cover problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.covering.min_vertexcover.extract_solution" title="graphilp.covering.min_vertexcover.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of vertices comprising a vertex cover</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="heuristics">
+<h3>Heuristics<a class="headerlink" href="#heuristics" title="Permalink to this headline">¶</a></h3>
+<p>The methods in this section provide approximate solutions to the vertex cover problem constituting admissible solutions from which to start the exact optimisation.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.heuristics.vertexcover_maximal_matching.get_heuristic" title="graphilp.covering.heuristics.vertexcover_maximal_matching.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Approximate solution to the minimum vertex cover problem via maximal matching heuristic</p></td>
+</tr>
+</tbody>
+</table>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.heuristics.vertexcover_lp_rounding.get_heuristic" title="graphilp.covering.heuristics.vertexcover_lp_rounding.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Approximate solution to the minimum vertex cover problem via LP rounding</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="knapsack">
+<h2>Knapsack<a class="headerlink" href="#knapsack" title="Permalink to this headline">¶</a></h2>
+<p>In the <a class="reference external" href="https://en.wikipedia.org/wiki/Knapsack_problem#Multi-dimensional_knapsack_problem">multi-dimensional knapsack problem</a>
+the goal is to pack items with the highest total value into a knapsack where each item has a multi-dimensional weight vector and the knapsack has an individual capacity that cannot be exceeded in each dimension of the weight vector.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.knapsack.create_model" title="graphilp.covering.knapsack.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for the multi-dimensional knapsack problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.covering.knapsack.extract_solution" title="graphilp.covering.knapsack.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of items contained in the solution.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="k-cover">
+<h2>k-Cover<a class="headerlink" href="#k-cover" title="Permalink to this headline">¶</a></h2>
+<p>In the k-cover problem, the elements of the universe of a set system are to be covered by at most k sets of the system.
+The objective is then to maximise the total weight of the elements that are covered.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.k_cover.create_model" title="graphilp.covering.k_cover.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Greate an ILP for the k-cover problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.covering.k_cover.extract_solution" title="graphilp.covering.k_cover.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of sets comprising the k-cover</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="set-cover">
+<h2>Set cover<a class="headerlink" href="#set-cover" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Set_cover_problem">set cover problem</a> is to find the smallest weight sub-collection of the sets in a set system such that all elements of the underlying universe are covered.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.set_cover.create_model" title="graphilp.covering.set_cover.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Greate an ILP for the set cover problem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.covering.set_cover.extract_solution" title="graphilp.covering.set_cover.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of sets comprising a set cover</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id5">
+<h3>Heuristics<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>The methods in this section provide approximate solutions to the set cover problem constituting admissible solutions from which to start the exact optimisation.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.covering.heuristics.setcover_greedy.get_heuristic" title="graphilp.covering.heuristics.setcover_greedy.get_heuristic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_heuristic</span></code></a></p></td>
+<td><p>Greedy heuristic for the set cover problem</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-graphilp.covering.min_dom_set">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.covering.min_dom_set" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="graphilp.covering.min_dom_set.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.min_dom_set.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.min_dom_set.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the minimum dominating set problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{v\in V}~x_v\\
+\text{s.t.}&amp;&amp;\\
+\forall v \in V:&amp; \sum_{a\in \bigcup_{v\in e} e  }  x_a \geq 1 &amp; \text{(each node is covered by a neighbour)}
+\end{align*}</div></dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_mindomset.png" src="_images/example_mindomset.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/DominatingQueens.ipynb">Minimum dominating set</a></p>
+<p>Find how many queens are needed to cover all squares on an <span class="math notranslate nohighlight">\(n\times n\)</span> chessboard.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.covering.min_dom_set.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.min_dom_set.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.min_dom_set.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of edges comprising a dominating set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for minimum dominating set</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of nodes comprising a minimum dominating set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.min_edge_dom"></span><dl class="py function">
+<dt id="graphilp.covering.min_edge_dom.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.min_edge_dom.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.min_edge_dom.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the minimum edge dominating set problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{e\in E}x_e\\
+\text{s.t.}&amp;&amp;\\
+\forall e \in E:&amp; \sum_{a\in E ~:~e\cap a \neq \emptyset  }  x_a \geq 1 &amp;
+\text{(each edge must be covered by an adjacent one)} \\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.covering.min_edge_dom.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.min_edge_dom.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.min_edge_dom.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of edges comprising an edge dominating set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for minimum edge dominating set</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges comprising a minimum edge dominating set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.min_vertexcover"></span><dl class="py function">
+<dt id="graphilp.covering.min_vertexcover.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.min_vertexcover.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.min_vertexcover.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the minimum vertex cover problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the node dictionary of the graph</p></li>
+<li><p><strong>warmstart</strong> – a list of vertices forming a vertex cover of G</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{v\in V} w_v x_v\\
+\text{s.t.}&amp;&amp;\\
+\forall \{k,j\} \in E: &amp; x_k + x_j \geq 1 &amp; \text{(at least one vertex in each edge is covered)}
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.covering.min_vertexcover.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.min_vertexcover.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.min_vertexcover.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of vertices comprising a vertex cover</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for minimum vertex cover</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of vertices of minimum vertex cover</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.heuristics.vertexcover_maximal_matching"></span><dl class="py function">
+<dt id="graphilp.covering.heuristics.vertexcover_maximal_matching.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.heuristics.vertexcover_maximal_matching.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.heuristics.vertexcover_maximal_matching.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate solution to the minimum vertex cover problem via maximal matching heuristic</p>
+<p>This heuristic successively chooses an edge in the graph, adds its vertices to the vertex cover
+and then deletes all edges adjacent to these vertices because they are already covered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of vertices forming a vertex cover of G</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.heuristics.vertexcover_lp_rounding"></span><dl class="py function">
+<dt id="graphilp.covering.heuristics.vertexcover_lp_rounding.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.heuristics.vertexcover_lp_rounding.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.heuristics.vertexcover_lp_rounding.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate solution to the minimum vertex cover problem via LP rounding</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> – an <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of vertices forming a vertex cover of G</p>
+</dd>
+</dl>
+<dl>
+<dt>LP:</dt><dd><p>The following LP with continuous node variables is rounded to obtain an approximation.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{v\in V} x_v\\
+\text{s.t.}&amp;&amp;\\
+\forall v \in V: &amp; x_v \geq 0\\
+\forall v \in V: &amp; x_v \leq 1\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.knapsack"></span><dl class="py function">
+<dt id="graphilp.covering.knapsack.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.knapsack.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.knapsack.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for the multi-dimensional knapsack problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a>.</p></li>
+<li><p><strong>W</strong> – capacity of each knapsack</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(M\)</span> be the incidence matrix of the set system, <span class="math notranslate nohighlight">\(w\)</span> the vector of weights giving
+the value of the items to be packed and <span class="math notranslate nohighlight">\(x\)</span> a vector indicating which item is selected.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max w^{\top}x \\
+\text{s.t.} &amp;&amp;\\
+Mx \leq W &amp;&amp; \text{(do not exceed capacity in any dimension)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.covering.knapsack.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.knapsack.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.knapsack.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of items contained in the solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for the knapsack problem</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of items contained in the knapsack solution</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.k_cover"></span><dl class="py function">
+<dt id="graphilp.covering.k_cover.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.k_cover.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.k_cover.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Greate an ILP for the k-cover problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>k</strong> – maximal number of sets in solution</p></li>
+<li><p><strong>warmstart</strong> – a list of sets forming a cover</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(S\)</span> be the collection of sets in the set system, <span class="math notranslate nohighlight">\(U\)</span> the underlying universe, and
+<span class="math notranslate nohighlight">\(w_u\)</span> the weight of each element <span class="math notranslate nohighlight">\(u \in U\)</span>.
+For each <span class="math notranslate nohighlight">\(s \in S\)</span>, the decision variable <span class="math notranslate nohighlight">\(x_s\)</span> indicates whether <span class="math notranslate nohighlight">\(s\)</span> is part
+of the solution. For each <span class="math notranslate nohighlight">\(u \in U\)</span>, the decision variable <span class="math notranslate nohighlight">\(y_u\)</span> indicates whether
+<span class="math notranslate nohighlight">\(u\)</span> is covered in the solution.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{u \in U} w_u y_u \\
+\text{s.t.} &amp;&amp;\\
+\forall u \in U: \sum_{s:u \in s}x_{s} \geq y_u &amp;&amp; \text{(chosen sets cover elements of the universe)}\\
+\sum_{s \in S} x_{s} \leq k &amp;&amp; \text{(use at most k sets)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.covering.k_cover.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.k_cover.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.k_cover.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of sets comprising the k-cover</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for k coverage</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of sets contained in the solution of the k-cover</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.set_cover"></span><dl class="py function">
+<dt id="graphilp.covering.set_cover.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.set_cover.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.set_cover.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Greate an ILP for the set cover problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>warmstart</strong> – a list of sets forming a cover</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(S\)</span> be the collection of sets in the set system, <span class="math notranslate nohighlight">\(U\)</span> the underlying universe,
+and <span class="math notranslate nohighlight">\(w_s\)</span> the weight of set <span class="math notranslate nohighlight">\(s \in S\)</span>.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\min \sum_{s \in S} w_{s} x_{s} \\
+\text{s.t.} &amp;&amp;\\
+\forall u \in U: \sum_{s:u \in s}x_{s} \geq 1 &amp;&amp; \text{(cover every element of the universe)}\\
+\forall s \in S: x_{s} \in \{0,1\} &amp;&amp; \text{(every set is either in the set cover or not)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.covering.set_cover.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.set_cover.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.set_cover.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of sets comprising a set cover</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for weighted set cover</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sets of the optimal set cover solution</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.covering.heuristics.setcover_greedy"></span><dl class="py function">
+<dt id="graphilp.covering.heuristics.setcover_greedy.get_heuristic">
+<code class="sig-prename descclassname"><span class="pre">graphilp.covering.heuristics.setcover_greedy.</span></code><code class="sig-name descname"><span class="pre">get_heuristic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.covering.heuristics.setcover_greedy.get_heuristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Greedy heuristic for the set cover problem</p>
+<p>If paramter k is specified, the problem turns into a k-cover problem.
+In this case, the heuristic greedily approximates the maximal number of vertices that can
+be covered with at most k sets otherwise there is no limit on the number of sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpsetsystem.ILPSetSystem" title="graphilp.imports.ilpsetsystem.ILPSetSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPSetSystem</span></code></a></p></li>
+<li><p><strong>k</strong> – maximal number of sets to use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of sets approximating the set cover problem</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="cuts_flows.html" class="btn btn-neutral float-right" title="Cuts and Flows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

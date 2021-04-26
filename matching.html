@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Matching &mdash; GraphILP 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Networks" href="network.html" />
+    <link rel="prev" title="Imports" href="imports.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GraphILP
+          
+
+          
+            
+            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-matching">General matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#perfect-matching">Perfect matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bipartite-matching">Bipartite matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-graphilp.matching.maxweight">Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphILP</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Matching</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/matching.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="matching">
+<span id="id1"></span><h1>Matching<a class="headerlink" href="#matching" title="Permalink to this headline">¶</a></h1>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> in a graph <span class="math notranslate nohighlight">\(G = (V, E)\)</span> is a subset <span class="math notranslate nohighlight">\(S \subset E\)</span> of edges in which no pair of edges shares a vertex.</p>
+<a class="reference internal image-reference" href="_images/illustration_matching.png"><img alt="_images/illustration_matching.png" src="_images/illustration_matching.png" style="height: 200px;" /></a>
+<p>There are numerous natural optimisation questions on matchings, e.g., looking for perfect matchings (covering all vertices), maximal matchings (those that cannot be extended to a larger matching), maximum matchings (maximum cardinality), matching for certain classes of graphs, and matchings that optimise the weights of the edges involved in the matching.</p>
+<p>An extensive discussion of matchings can be found in</p>
+<ul class="simple">
+<li><p>Lovász, Plummer: <a class="reference external" href="https://www.ams.org/publications/authors/books/postpub/chel-367">Matching Theory</a>.</p></li>
+</ul>
+<div class="section" id="general-matching">
+<h2>General matching<a class="headerlink" href="#general-matching" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.matching.maxweight.create_model" title="graphilp.matching.maxweight.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for maximum weight matching</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.matching.maxweight.extract_solution" title="graphilp.matching.maxweight.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of the edges comprising the maximum weight matching</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="perfect-matching">
+<h2>Perfect matching<a class="headerlink" href="#perfect-matching" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Perfect_matching">perfect matching</a> in a graph is a matching in which each vertex of the graph is covered by an edge of the matching.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.matching.perfect.create_model" title="graphilp.matching.perfect.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for maximum/minimum weight perfect matching</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.matching.perfect.extract_solution" title="graphilp.matching.perfect.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of the edges comprising the minimum/maximum weight perfect matching</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="bipartite-matching">
+<h2>Bipartite matching<a class="headerlink" href="#bipartite-matching" title="Permalink to this headline">¶</a></h2>
+<p>For <a class="reference external" href="https://en.wikipedia.org/wiki/Bipartite_graph">bipartite</a> graphs, matching is usually much easier than for general graphs. The natural ILP for bipartite perfect matching is in fact a linear program: the integrality constraints are fulfilled automatically.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#graphilp.matching.perfect_bipartite.create_model" title="graphilp.matching.perfect_bipartite.create_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model</span></code></a></p></td>
+<td><p>Create an ILP for maximum/minimum bipartite perfect matching</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#graphilp.matching.perfect_bipartite.extract_solution" title="graphilp.matching.perfect_bipartite.extract_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_solution</span></code></a></p></td>
+<td><p>Get a list of the edges comprising the miniumum/maximum weight perfect bipartite matching</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-graphilp.matching.maxweight">
+<span id="details"></span><h2>Details<a class="headerlink" href="#module-graphilp.matching.maxweight" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="graphilp.matching.maxweight.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.matching.maxweight.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.matching.maxweight.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for maximum weight matching</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\max \sum_{\{i, j\} \in E} w_{ij} x_{ij}\\
+\text{s.t.} &amp;&amp;\\
+\forall \{u, v\} \in E: x_{uv} - x_u \leq 0 &amp;&amp;
+\text{(choosing an edge implies choosing both of its vertices)}\\
+\forall \{u, v\} \in E: x_{uv} - x_v \leq 0 &amp;&amp;
+\text{(choosing an edge implies choosing both of its vertices)}\\
+\forall v \in V: \sum_{\{u,v\} \in E} x_{uv} \leq 1 &amp;&amp;
+\text{(at most one edge adjacent to each vertex)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.matching.maxweight.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.matching.maxweight.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.matching.maxweight.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of the edges comprising the maximum weight matching</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for maximum weight matching</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges comprising the maximum weight matching</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.matching.perfect"></span><dl class="py function">
+<dt id="graphilp.matching.perfect.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.matching.perfect.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.matching.perfect.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for maximum/minimum weight perfect matching</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight matching, GRB.MINIMIZE for minimum weight matching</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><p>Let <span class="math notranslate nohighlight">\(n\)</span> be the number of vertices in the graph.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\max / \min \sum_{\{i, j\} \in E} w_{ij} x_{ij}\\
+\text{s.t.} &amp;&amp;\\
+\forall \{u, v\} \in E: x_{uv} = n/2&amp;&amp;
+\text{(} n/2 \text{ edges in matching)}\\
+\forall v \in V: \sum_{\{u,v\} \in E} x_{uv} \leq 1 &amp;&amp;
+\text{(at most one edge adjacent to each vertex)}\\
+\end{align*}</div></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.matching.perfect.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.matching.perfect.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.matching.perfect.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of the edges comprising the minimum/maximum weight perfect matching</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for maximum weight matching</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges comprising the maximum weight matching</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-graphilp.matching.perfect_bipartite"></span><dl class="py function">
+<dt id="graphilp.matching.perfect_bipartite.create_model">
+<code class="sig-prename descclassname"><span class="pre">graphilp.matching.perfect_bipartite.</span></code><code class="sig-name descname"><span class="pre">create_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.matching.perfect_bipartite.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ILP for maximum/minimum bipartite perfect matching</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted bipartite <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>A</strong> – subset of the vertex set of G giving the bipartition (each edge has exactly one end in A)</p></li>
+<li><p><strong>weight</strong> – name of the weight parameter in the edge dictionary of the graph</p></li>
+<li><p><strong>direction</strong> – GRB.MAXIMIZE for maximum weight matching, GRB.MINIMIZE for minimum weight matching</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a <a class="reference external" href="https://www.gurobi.com/documentation/9.1/refman/py_model.html">gurobipy model</a></p>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>ILP:</dt><dd><div class="math notranslate nohighlight">
+\begin{align*}
+\max / \min \sum_{\{i, j\} \in E} w_{ij} x_{ij}\\
+\text{s.t.} &amp;&amp;\\
+\forall u \in A: \sum_{\{u,v\} \in E} x_{uv} = 1 &amp;&amp;
+\text{(exactly one edge adjacent to each } u \in A\text{)}\\
+\forall u \in V \setminus A: \sum_{\{u,v\} \in E} x_{uv} = 1 &amp;&amp;
+\text{(exactly one edge adjacent to each } u \in V \setminus A\text{)}\\
+\end{align*}</div><p>This is actually a linear program, i.e., solutions to the LP relaxation are automatically integral.</p>
+</dd>
+<dt>References:</dt><dd><p>Lovász, Plummer: <a class="reference external" href="https://www.ams.org/publications/authors/books/postpub/chel-367">Matching Theory</a>, Chapter 7.1.</p>
+</dd>
+<dt>Example:</dt><dd><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="_images/example_bipartite.png" src="_images/example_bipartite.png" />
+</td>
+<td><p><a class="reference external" href="https://github.com/VF-DE-CDS/GraphILP-API/blob/develop/graphilp/examples/2ColouredPartitions.ipynb">Two-coloured partitions</a></p>
+<p>Learn how to use perfect matching in bipartite graphs to find a way</p>
+<p>to connect n random blue points in the plane</p>
+<p>to n random orange points without crossings.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="graphilp.matching.perfect_bipartite.extract_solution">
+<code class="sig-prename descclassname"><span class="pre">graphilp.matching.perfect_bipartite.</span></code><code class="sig-name descname"><span class="pre">extract_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphilp.matching.perfect_bipartite.extract_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of the edges comprising the miniumum/maximum weight perfect bipartite matching</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> – a weighted <a class="reference internal" href="imports.html#graphilp.imports.ilpgraph.ILPGraph" title="graphilp.imports.ilpgraph.ILPGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILPGraph</span></code></a></p></li>
+<li><p><strong>model</strong> – a solved Gurobi model for minimum/maximum weight perfect bipartite matching</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of edges comprising the minimum/maximum weight perfect bipartite matching</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="network.html" class="btn btn-neutral float-right" title="Networks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="imports.html" class="btn btn-neutral float-left" title="Imports" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, GraphILP API Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
