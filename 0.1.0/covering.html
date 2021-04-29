@@ -206,7 +206,7 @@
 </div>
 <div class="section" id="edge-dominating-set">
 <h2>Edge dominating set<a class="headerlink" href="#edge-dominating-set" title="Permalink to this headline">¶</a></h2>
-<p>An <a class="reference external" href="https://en.wikipedia.org/wiki/Edge_dominating_set">edge dominating set</a> in a graph <span class="math notranslate nohighlight">\(G = (V, E)\)</span> is a subset <span class="math notranslate nohighlight">\(S \subset E\)</span> of the edge set such that each edge in <span class="math notranslate nohighlight">\(E\)</span> is adjacent to an edge in <span class="math notranslate nohighlight">\(S\)</span>.</p>
+<p>An <a class="reference external" href="https://en.wikipedia.org/wiki/Edge_dominating_set">edge dominating set</a> in a graph <span class="math notranslate nohighlight">\(G = (V, E)\)</span> is a subset <span class="math notranslate nohighlight">\(S \subseteq E\)</span> of the edge set such that each edge in <span class="math notranslate nohighlight">\(E\)</span> is adjacent to an edge in <span class="math notranslate nohighlight">\(S\)</span>.</p>
 <a class="reference internal image-reference" href="_images/illustration_edge_dom.png"><img alt="_images/illustration_edge_dom.png" src="_images/illustration_edge_dom.png" style="height: 200px;" /></a>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -514,6 +514,7 @@ and then deletes all edges adjacent to these vertices because they are already c
 \begin{align*}
 \min \sum_{v\in V} x_v\\
 \text{s.t.}&amp;&amp;\\
+\forall \{u, v\} \in E: x_u + x_v \geq 1 &amp;&amp; \text{(at least one vertex in each edge is covered)}\\
 \forall v \in V: &amp; x_v \geq 0\\
 \forall v \in V: &amp; x_v \leq 1\\
 \end{align*}</div></dd>

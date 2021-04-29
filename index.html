@@ -1,285 +1,34 @@
-
-
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Integer linear programs for graph problems &mdash; GraphILP 0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
+<html>
+    <head>
+        <title>GraphILP API Documentation</title>
+    </head>
     
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introduction" href="introduction.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="#" class="icon icon-home"> GraphILP
-          
-
-          
-            
-            <img src="_static/graphilp_logo.png" class="logo" alt="Logo"/>
-          
-          </a>
-
-          
-            
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
+    <body>
+        <style>
+            div {
+                font-family: 'Helvetica';
+            }
+            ul { list-style-type:none; }
+            div.logo { background-color:#427FB4; padding:10px; }
+            a:link { color:#427FB4; }
+            a:visited { color:#528FC4; }
+        </style>
+        
+        <div style='margin: 0 auto; text-align: center; width:50%; height:100%; background-color:#EEEEEE;'>
+            <div class='logo'><img width='320px' src="0.1.0/_static/graphilp_logo.png"/></div>
+            <div>
+                <div style='text-align: left; padding:50px;'>
+                    GraphILP is a <a href="https://www.python.org">Python</a> API to automatically cast <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)">graph</a>-related optimisation problems into integer linear programming instances for the <a href="https://www.gurobi.com">Gurobi</a> optimiser.<br>
+                <br>
+                <a href="https://github.com/VF-DE-CDS/GraphILP-API">Source Code</a>
+                </div>
+                
+                <h1>Documentation</h1>
+                <ul>
+                    <li><a href='0.1.0/index.html'>Version 0.1.0</a></li>
+                </ul>
+            </div>
         </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a></li>
-<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a></li>
-<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a></li>
-</ul>
-
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">GraphILP</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
+    </body>
     
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Integer linear programs for graph problems</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="integer-linear-programs-for-graph-problems">
-<span id="contents"></span><h1>Integer linear programs for graph problems<a class="headerlink" href="#integer-linear-programs-for-graph-problems" title="Permalink to this headline">¶</a></h1>
-<p>GraphILP is a Python API to automatically cast graph-related optimisation problems into integer linear programming (ILP) instances.
-See the <a class="reference internal" href="introduction.html#introduction"><span class="std std-ref">Introduction</span></a> to get an idea of the relationship between optimisation problems on graphs and ILPs.
-It also lists a number of examples that are ideal for a quick start with GraphILP.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#how-to-use">How to use</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#examples">Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="covering.html">Covering</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="covering.html#dominating-set">Dominating set</a></li>
-<li class="toctree-l2"><a class="reference internal" href="covering.html#edge-dominating-set">Edge dominating set</a></li>
-<li class="toctree-l2"><a class="reference internal" href="covering.html#vertex-cover">Vertex cover</a></li>
-<li class="toctree-l2"><a class="reference internal" href="covering.html#knapsack">Knapsack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="covering.html#k-cover">k-Cover</a></li>
-<li class="toctree-l2"><a class="reference internal" href="covering.html#set-cover">Set cover</a></li>
-<li class="toctree-l2"><a class="reference internal" href="covering.html#module-graphilp.covering.min_dom_set">Details</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cuts_flows.html">Cuts and Flows</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cuts_flows.html#bisection">Bisection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cuts_flows.html#cuts">Cuts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cuts_flows.html#flows">Flows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cuts_flows.html#module-graphilp.cuts_flows.bisection">Details</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="imports.html">Imports</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="imports.html#ilpgraph">ILPGraph</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imports.html#networkx">NetworkX</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imports.html#graph-file-formats">Graph file formats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imports.html#ilpsetsystem">ILPSetSystem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imports.html#module-graphilp.imports.ilpgraph">Details</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="matching.html#general-matching">General matching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matching.html#perfect-matching">Perfect matching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matching.html#bipartite-matching">Bipartite matching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matching.html#module-graphilp.matching.maxweight">Details</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="network.html">Networks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="network.html#steiner-tree-problem">Steiner Tree Problem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network.html#prize-collecting-steiner-tree-pcst">Prize Collecting Steiner Tree (PCST)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network.html#travelling-salesman-problem-tsp">Travelling Salesman Problem (TSP)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network.html#module-graphilp.network.steiner">Details</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="packing.html">Packing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="packing.html#independent-set">Independent set</a></li>
-<li class="toctree-l2"><a class="reference internal" href="packing.html#clique-packing">Clique packing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="packing.html#set-packing">Set packing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="packing.html#module-graphilp.packing.max_indset">Details</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="partitioning.html">Partitioning</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="partitioning.html#vertex-colouring">Vertex colouring</a></li>
-<li class="toctree-l2"><a class="reference internal" href="partitioning.html#module-graphilp.partitioning.min_vertex_coloring">Details</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sub_super.html">Sub- and supergraphs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sub_super.html#clique">Clique</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sub_super.html#module-graphilp.sub_super.max_clique_pack">Details</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-
-
-           </div>
-           
-          </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, GraphILP API Developers.
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
 </html>
